@@ -32,6 +32,7 @@ public slots:
         void addColumn();
   void setHeader(int col);
 
+
 };
 
 #endif // SPREADSHEET_H

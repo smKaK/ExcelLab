@@ -107,7 +107,7 @@ void Spreadsheet::setAutoRecalculation(bool b)
 
 void Spreadsheet::SpreadsheetModified()
 {
-    qDebug() << "SpredsheetModified";
+    qDebug() << "SpredsheetModified spreadsheet";
     if(autoRecalc)
         recalculate();
     emit modified();
