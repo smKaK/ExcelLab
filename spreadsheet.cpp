@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTableWidget>
-
+#include "cell.h"
 
 void Spreadsheet::setHeaders()
 {
@@ -70,7 +70,7 @@ Spreadsheet::Spreadsheet(QWidget* parent)
 
       qDebug() << "Spreadsheet";
     setSelectionMode(ContiguousSelection);
-
+    setItemPrototype(new Cell);
     clear();
 
     for(int i = 0; i < 10; ++i)
@@ -126,10 +126,6 @@ void Spreadsheet::clear()
 {
     setRowCount(0);
     setColumnCount(0);
-
-
-
-
     setCurrentCell(0, 0);
 }
 
