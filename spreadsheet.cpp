@@ -6,6 +6,35 @@
 #include <QTableWidget>
 #include "cell.h"
 
+
+//Constructor and Destructor///////////////////////////////////////////////////////////////////////////////////////////////////
+
+Spreadsheet::Spreadsheet(QWidget* parent)
+{
+
+    autoRecalc = true;
+
+    setSelectionMode(ContiguousSelection);
+    setItemPrototype(new Cell);
+
+    clear();
+
+    for(int i = 0; i < 10; ++i)
+    {
+        addRow();
+        addColumn();
+    }
+    setHeaders();
+    connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(SpreadsheetModified()));
+}
+
+Spreadsheet::~Spreadsheet()
+{
+
+}
+
+//Column's headers/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Spreadsheet::setHeaders()
 {
     for(int i = 0; i < columnCount(); ++i)
@@ -61,34 +90,7 @@ void Spreadsheet::setHeader(int col)
     }
 }
 
-
-
-Spreadsheet::Spreadsheet(QWidget* parent)
-{
-
-    autoRecalc = true;
-
-      qDebug() << "Spreadsheet";
-    setSelectionMode(ContiguousSelection);
-    setItemPrototype(new Cell);
-    clear();
-
-    for(int i = 0; i < 10; ++i)
-    {
-        addRow();
-        addColumn();
-    }
-   setHeaders();
-   // connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(SpreadsheetModified()));
-}
-
-Spreadsheet::~Spreadsheet()
-{
-
-}
-
-
-
+//Modifying and recalculation//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Spreadsheet::recalculate()
 {
@@ -111,7 +113,7 @@ void Spreadsheet::SpreadsheetModified()
     emit modified();
 }
 
-
+//Current Location//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 QString Spreadsheet::currentLocation()
 {
@@ -121,6 +123,7 @@ QString Spreadsheet::currentLocation()
 
 }
 
+//Clear/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Spreadsheet::clear()
 {
