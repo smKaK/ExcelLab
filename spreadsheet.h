@@ -3,6 +3,7 @@
 
 #include <QTableWidget>
 #include <QObject>
+#include "node.h"
 
 class Spreadsheet : public QTableWidget
 {

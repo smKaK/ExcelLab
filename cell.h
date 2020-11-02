@@ -17,10 +17,11 @@ public:
     QString formula() const;
     void setDirty();
 private:
-
+   QSharedPointer<Node_Statement> s;
     QVariant getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;
+
 };
 
 #endif // CELL_H

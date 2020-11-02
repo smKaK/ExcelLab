@@ -47,11 +47,8 @@ void Cell::setData(int role, const QVariant &value)
 {
 
      s = Parser::parse(Lexer::Tokenize("1213 + 123"));
-     for(auto& el : Lexer::Tokenize("1213 + 123"))
-     {
-         qDebug() << el.GetLexema();
-     }
-     //getValue();
+     
+      
     QTableWidgetItem::setData(role, value);
 
 

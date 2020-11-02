@@ -30,6 +30,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         node.cpp \
+        parser.cpp \
         spreadsheet.cpp \
         token.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
         lexer.h \
         mainwindow.h \
         node.h \
+        parser.h \
         spreadsheet.h \
         token.h
 
