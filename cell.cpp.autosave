@@ -4,13 +4,12 @@
 Cell::Cell()
 {
     setDirty();
-    t = new Token();
-    s.reset(new Node_Statement);
+  
 }
 
 Cell::~Cell()
 {
-    delete t;
+  
 }
 
 

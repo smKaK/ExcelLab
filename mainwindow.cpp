@@ -122,6 +122,16 @@ void MainWindow::on_actionAbout_triggered()
         "<р>Кляцко Семен К-14"));
 }
 
+void MainWindow::on_actionAdd_Column_triggered()
+{
+    ui->tableWidget->addColumn();
+}
+
+void MainWindow::on_actionAdd_Row_triggered()
+{
+    ui->tableWidget->addRow();
+}
+
 //Save File/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool MainWindow::saveFile(const QString &fileName)
@@ -145,4 +155,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->accept();
     }
 }
+
+
 

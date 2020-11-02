@@ -28,12 +28,16 @@ SOURCES += \
         cell.cpp \
         main.cpp \
         mainwindow.cpp \
-        spreadsheet.cpp
+        node.cpp \
+        spreadsheet.cpp \
+        token.cpp
 
 HEADERS += \
         cell.h \
         mainwindow.h \
-        spreadsheet.h
+        node.h \
+        spreadsheet.h \
+        token.h
 
 FORMS += \
         mainwindow.ui

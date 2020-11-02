@@ -72,6 +72,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="action_Open"/>
+   <addaction name="action_Save"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd_Column"/>
+   <addaction name="actionAdd_Row"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -120,6 +126,16 @@
   <action name="actionAbout">
    <property name="text">
     <string>About App</string>
+   </property>
+  </action>
+  <action name="actionAdd_Column">
+   <property name="text">
+    <string>Add Column</string>
+   </property>
+  </action>
+  <action name="actionAdd_Row">
+   <property name="text">
+    <string>Add Row</string>
    </property>
   </action>
  </widget>

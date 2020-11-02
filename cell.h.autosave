@@ -17,8 +17,7 @@ public:
     QString formula() const;
     void setDirty();
 private:
-    Token* t;
-    QSharedPointer<Node_Statement> s;
+  
     QVariant getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;

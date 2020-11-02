@@ -39,6 +39,10 @@ private slots:
      void on_action_About_Qt_triggered();
      void on_actionAbout_triggered();
 
+     void on_actionAdd_Column_triggered();
+
+     void on_actionAdd_Row_triggered();
+
 protected:
 
      void closeEvent(QCloseEvent *event);
