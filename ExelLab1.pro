@@ -26,6 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         cell.cpp \
+        lexer.cpp \
         main.cpp \
         mainwindow.cpp \
         node.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
         cell.h \
+        lexer.h \
         mainwindow.h \
         node.h \
         spreadsheet.h \
