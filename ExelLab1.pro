@@ -46,6 +46,12 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
+win32 {
+    INCLUDEPATH += C:\boost_1_70_0\boost_mingw_53_32\include\boost-1_70
+
+}
+
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

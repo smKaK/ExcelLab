@@ -31,7 +31,7 @@ QVariant Cell::data(int role) const
 
         if(role ==Qt::DisplayRole)
         {
-            QVariant res(this->getValue());
+            QVariant res = this->getValue();
             if( res.isValid()){
                 return res;
 
@@ -47,6 +47,7 @@ void Cell::setData(int role, const QVariant &value)
 {
 
      s = Parser::parse(Lexer::Tokenize("1213 + 123"));
+     val = s->calculate(this).str().data();
      for(auto& el : Lexer::Tokenize("1213 + 123"))
      {
          qDebug() << el.GetLexema();
@@ -59,7 +60,8 @@ void Cell::setData(int role, const QVariant &value)
         setDirty();
 }
 
-QVariant Cell::getValue() const
+QString Cell::getValue() const
 {
-    return  s->calculate(this);
+    qDebug() << "GetValue";
+    return val;
 }

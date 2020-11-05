@@ -4,6 +4,7 @@
 #include <QSharedPointer>
 #include <token.h>
 #include "cell.h"
+#include <boost/multiprecision/cpp_int.hpp>
 
 class Node_Statement;
 class Node_Expression;
@@ -24,7 +25,7 @@ class Node
 {
 public:
 
-    virtual int calculate(const Cell* parentCell) = 0;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) = 0;
 };
 
 class Node_Statement : public Node
@@ -34,8 +35,7 @@ private:
     QSharedPointer<Node_Expression> exprNode;
 public:
     Node_Statement( );
-
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     void setExpressionNode(const QSharedPointer<Node_Expression>& newExpxrNode);
 
 };
@@ -46,7 +46,7 @@ private:
     QSharedPointer<Node_Multiplication>  multNode;
     QSharedPointer<Node_ExpressionRight> exprRightNode;
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     Node_Expression( );
 
 };
@@ -59,7 +59,7 @@ private:
     QSharedPointer<Node_ExpressionRight> exprRightNode;
 
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     TokenType GetOperator();
     QSharedPointer<Node_ExpressionRight> GetEsxprRight();
     Node_ExpressionRight( );
@@ -73,7 +73,7 @@ private:
     QSharedPointer<Node_Power> powerNode;
     QSharedPointer<Node_MultiplicationRight> multRightNode;
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     Node_Multiplication( );
 
 };
@@ -86,7 +86,7 @@ private:
     QSharedPointer<Node_Power> powerNode;
     QSharedPointer<Node_MultiplicationRight> multRightNode;
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     TokenType GetOperator() const;
     Node_MultiplicationRight( );
 
@@ -97,9 +97,9 @@ class Node_Power : public Node
 private:
    QSharedPointer<Node_Term> termNode;
    QSharedPointer<Node_PowerRight> powerRightNode;
-   int power(int base, int pow) const;
+   boost::multiprecision::cpp_int power(boost::multiprecision::cpp_int base, boost::multiprecision::cpp_int pow) const;
 public:
-   virtual int calculate(const Cell* parentCell) override;
+   virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
    Node_Power( );
 
 };
@@ -110,9 +110,9 @@ private:
    TokenType op;
    QSharedPointer<Node_Term> termNode;
    QSharedPointer<Node_PowerRight> powerRightNode;
-   int power(int base, int pow) const;
+   boost::multiprecision::cpp_int power(boost::multiprecision::cpp_int base, boost::multiprecision::cpp_int pow) const;
 public:
-   virtual int calculate(const Cell* parentCell) override;
+   virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
    TokenType GetOperator() const;
    Node_PowerRight( );
 
@@ -125,13 +125,13 @@ private:
 
 public:
     Node_Term( );
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
 };
 
 class Node_Number : public Node
 {
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
 private:
     TokenType token;
     QString numLexema;
@@ -142,7 +142,7 @@ private:
 class Node_CellLink : public Node
 {
 public:
-    virtual int calculate(const Cell* parentCell) override;
+    virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
 private:
     TokenType token;
     QString cellLink;

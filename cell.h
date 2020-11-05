@@ -18,7 +18,8 @@ public:
     void setDirty();
 private:
    QSharedPointer<Node_Statement> s;
-    QVariant getValue() const ;
+   QString val;
+    QString getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;
 
