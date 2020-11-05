@@ -43,6 +43,8 @@ private slots:
 
      void on_actionAdd_Row_triggered();
 
+     void on_actiondebug_triggered();
+
 protected:
 
      void closeEvent(QCloseEvent *event);

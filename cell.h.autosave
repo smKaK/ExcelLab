@@ -16,7 +16,7 @@ public:
     void setFormula(const QString &formula);
     QString formula() const;
     void setDirty();
-    QVariant getAnotherCellData(int row, int column);
+    QVariant getAnotherCellData(int row, int column) const;
 private:
     QSharedPointer<Node_Statement> s;
     QString val;

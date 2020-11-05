@@ -59,6 +59,7 @@
     </property>
     <addaction name="action_About_Qt"/>
     <addaction name="actionAbout"/>
+    <addaction name="actiondebug"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTools"/>
@@ -136,6 +137,11 @@
   <action name="actionAdd_Row">
    <property name="text">
     <string>Add Row</string>
+   </property>
+  </action>
+  <action name="actiondebug">
+   <property name="text">
+    <string>debug</string>
    </property>
   </action>
  </widget>

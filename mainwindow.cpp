@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include "cell.h"
 #include <QCloseEvent>
 
 //Constructor and destructor/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,3 +159,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 
 
+
+void MainWindow::on_actiondebug_triggered()
+{
+  qDebug() << static_cast<Cell*>(ui->tableWidget->item(1,1))->getAnotherCellData(2,2);
+}
