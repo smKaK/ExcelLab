@@ -6,23 +6,68 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 {
      QVector<Token>::const_iterator it = inputTokens.begin();
 
-     QSharedPointer<Node_Statement>  tree = stmt(inputTokens, it);
-
+     QSharedPointer<Node_Statement>  tree;
+     tree = stmt(inputTokens, it, tree->getIsExeption());
+     
      return tree;      
 }
 
-QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector<Token>::const_iterator &it)
+QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
 {
     QSharedPointer<Node_Statement> statement(new Node_Statement());
-     TokenType type = it->;
-     if(type == TokenType::kNum ||
-        type == TokenType::kMin ||
-        type == TokenType::kMax ||
-        type == TokenType::kLb )
+     TokenType type = it->getType();
+     if(type == TokenType::kNum  ||
+        type == TokenType::kMin  ||
+        type == TokenType::kMax  ||
+        type == TokenType::kCell ||
+        type == TokenType::kLb   ||
+        type == TokenType::kInc  ||
+        type == TokenType::kDec  ||
+        type == TokenType::kPlus ||
+        type == TokenType::kMinus)
     {
-     QSharedPointer<Node_Expression> expressionNode = expr(input, it);
-     statement->setExpressionNode(expressionNode);
+     QSharedPointer<Node_Expression> expressionNode = expr(input, it, bIsExeption);
+     if(bIsExeption)
+     {
+         statement->setExpressionNode(nullptr);
+         return statement;
+     } else 
+     {
+         statement->setExpressionNode(expressionNode);
+     }
     }
-     return statement;
-    return QSharedPointer<Node_Statement>(new Node_Statement());
+   
+        return statement;
+     
 }
+
+QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
+{
+   QSharedPointer<Node_Expression> expression(new Node_Expression());
+    TokenType type = it->getType();
+    if(type == TokenType::kNum  ||
+       type == TokenType::kMin  ||
+       type == TokenType::kMax  ||
+       type == TokenType::kCell ||
+       type == TokenType::kLb   ||
+       type == TokenType::kInc  ||
+       type == TokenType::kDec  ||
+       type == TokenType::kPlus ||
+       type == TokenType::kMinus)
+    {
+         QSharedPointer<Node_Multiplication> multiplicationNode = mult(input, it, bIsExeption);
+         if(bIsExeption)
+         {
+             expression->setMultNode(nullptr);
+             return expression;
+         } else 
+         {
+             expression->setMultNode(multiplicationNode);
+         }
+     }
+ 
+    
+    
+    return expression;     
+ }   
+   

@@ -10,9 +10,14 @@ using cpp_int = boost::multiprecision::cpp_int;
 
 
 
+bool &Node_Statement::getIsExeption()
+{
+    return bIsExeption;
+}
+
 Node_Statement::Node_Statement( ) : Node()
 {
-
+    
 }
 
 
@@ -23,9 +28,9 @@ cpp_int Node_Statement::calculate(const Cell* parentCell)
     // return exprNode->calculate(parentCell);
 }
 
-void Node_Statement::setExpressionNode(const QSharedPointer<Node_Expression> &newExprNode)
+void Node_Statement::setExpressionNode(const QSharedPointer<Node> &newExprNode)
 {
-    exprNode = newExprNode;
+    exprNode =  newExprNode;
 }
 
 
@@ -70,6 +75,11 @@ cpp_int Node_Expression::calculate(const Cell* parentCell)
         result = multRes - exprRightNodeCalcRes;
     }
     return result;
+}
+
+void Node_Expression::setMultNode(QSharedPointer<Node_Multiplication> newMultNode)
+{
+    multNode = newMultNode;
 }
 
 //Node_Multiplication/////////////////////////////////////////////////////////////////

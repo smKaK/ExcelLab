@@ -26,6 +26,7 @@ class Node
 public:
 
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) = 0;
+    
 };
 
 class Node_Statement : public Node
@@ -33,8 +34,10 @@ class Node_Statement : public Node
 private:
     Cell* parentCell;
     QSharedPointer<Node_Expression> exprNode;
+    bool bIsExeption;
 public:
-    Node_Statement( );
+    bool &getIsExeption();
+    Node_Statement();
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     void setExpressionNode(const QSharedPointer<Node_Expression>& newExpxrNode);
 
@@ -47,6 +50,7 @@ private:
     QSharedPointer<Node_ExpressionRight> exprRightNode;
 public:
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
+    void setMultNode(QSharedPointer<Node_Multiplication> newMultNode);
     Node_Expression( );
 
 };
