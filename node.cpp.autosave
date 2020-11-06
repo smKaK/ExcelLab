@@ -1,6 +1,9 @@
 #include "node.h"
 #include <cmath>
 #include <QDebug>
+#include <cmath>
+#include <algorithm>    
+
 //Node statement//////////////////////////////////////////////////////////////////////
 
 using cpp_int = boost::multiprecision::cpp_int;
@@ -198,12 +201,87 @@ cpp_int Node_Number::calculate(const Cell* parentCell)
 //Node_CellLink/////////////////////////////////////////////////////////////////////
 cpp_int Node_CellLink::calculate(const Cell* parentCell)
 {
-     this->
-    return 
+    QString column;
+    QString row;
+    for(int i =0 ; i < this->cellLink.length(); ++i)
+    {
+        if(cellLink[i].unicode() >= QChar('A').unicode() && cellLink[i].unicode() <= QChar('Z').unicode())
+        {
+           column.push_back(cellLink[i]); 
+        } else {
+           row.push_back(cellLink[i]); 
+        }
+    }
+    int rowNum = row.toInt();
+    int columnNum = 0;
+    for(int i = column.length()-1; i >= 0; --i)
+    {
+        columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1); 
+    }
+    
+    return cpp_int(parentCell->getAnotherCellData(rowNum, columnNum).toString().toStdString());
 }
 
 //Node_Term//////////////////////////////////////////////////////////////////////////
+Node_Term::Node_Term(TokenType op) : op(op)
+{
+    
+}
+
 cpp_int Node_Term::calculate(const Cell* parentCell)
 {
-    return 1;
+    if(this->op == TokenType::kPlus)
+    {
+        return termNode->calculate(parentCell) * 1;    
+    } else if(this->op == TokenType::kMin){
+        return termNode->calculate(parentCell) * (-1);
+    }
+      
+}
+//Node_FuncWith2Args//////////////////////////////////////////////////////////////////////////////////////////////
+Node_FuncWith2Args::Node_FuncWith2Args(TokenType function) : function(function)
+{
+    
+}
+
+boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentCell)
+{
+    cpp_int arg1 = expr1->calculate(parentCell);
+    cpp_int arg2 = expr2->calculate(parentCell);
+    if(function == TokenType::kMax)
+    {
+        return std::max(arg1, arg2);
+    } 
+    else 
+    {
+        return std::min(arg1,arg2);
+    }
+}
+//Node_FuncWith1Arg/////////////////////////////////////////////////////////////////////////////////////////////
+
+Node_FuncWith1Arg::Node_FuncWith1Arg(TokenType function) : function(function)
+{
+    
+}
+
+boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCell)
+{
+    cpp_int arg1 = expression->calculate(parentCell);
+    if(function == TokenType::kDec)
+    {
+        return --arg1;
+    } 
+    else 
+    {
+        return ++arg1;  
+    }
+            
+        
+}
+    
+
+//Node_ExpressionWithBrackets///////////////////////////////////////////////////////////////////////////////////
+boost::multiprecision::cpp_int Node_ExpressionWithBrackets::calculate(const Cell *parentCell)
+{
+    return expression->calculate(parentCell);
 }
