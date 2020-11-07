@@ -20,7 +20,7 @@ private:
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_Multiplication>  mult(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
-    static QSharedPointer<Node_Multiplication>  multRight(const QVector<Token>& input,
+    static QSharedPointer<Node_MultiplicationRight>  multRight(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_Power>           power(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);

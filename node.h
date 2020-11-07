@@ -86,6 +86,8 @@ public:
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
     void setPowerNode(QSharedPointer<Node_Power>);
     void setMultRightNode(QSharedPointer<Node_MultiplicationRight> newMultRightNode);
+    QSharedPointer<Node_Power> getPowerNode();
+    QSharedPointer<Node_MultiplicationRight> getMultRightNode();
     Node_Multiplication( );
 
 };
@@ -95,10 +97,11 @@ class Node_MultiplicationRight : public Node
 {
 private:
     TokenType op;
-    QSharedPointer<Node_Power> powerNode;
-    QSharedPointer<Node_MultiplicationRight> multRightNode;
+    QSharedPointer<Node_Multiplication> multNode;
 public:
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
+    void setOperator(TokenType type);
+    void setMultiplicationNode(QSharedPointer<Node_Multiplication> newMultNode);
     TokenType GetOperator() const;
     Node_MultiplicationRight( );
 

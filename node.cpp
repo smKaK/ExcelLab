@@ -131,9 +131,19 @@ void Node_Multiplication::setPowerNode(QSharedPointer<Node_Power> newPowerNode)
     powerNode = newPowerNode;
 }
 
-void Node_Multiplication::setRightMultnode(QSharedPointer<Node_MultiplicationRight> newMultRightNode)
+void Node_Multiplication::setMultRightNode(QSharedPointer<Node_MultiplicationRight> newMultRightNode)
 {
-    multRightNode = newMultRightNode
+    multRightNode = newMultRightNode;
+}
+
+QSharedPointer<Node_Power> Node_Multiplication::getPowerNode()
+{
+    return powerNode;
+}
+
+QSharedPointer<Node_MultiplicationRight> Node_Multiplication::getMultRightNode()
+{
+    return multRightNode;
 }
 
 //Node_MultiplicationRight////////////////////////////////////////////////////////////
@@ -141,16 +151,26 @@ void Node_Multiplication::setRightMultnode(QSharedPointer<Node_MultiplicationRig
 cpp_int Node_MultiplicationRight::calculate(const Cell* parentCell)
 {
     cpp_int result(0);
-    cpp_int powRes =  powerNode->calculate(parentCell);
-    cpp_int multRightNodeCalcRes =  multRightNode->calculate(parentCell);
-    if(multRightNode->GetOperator() == TokenType::kStar)
+    cpp_int powRes =  multNode->getPowerNode()->calculate(parentCell);
+    cpp_int multRightNodeCalcRes =  multNode->calculate(parentCell);
+    if(multNode->getMultRightNode()->GetOperator() == TokenType::kStar)
     {
         result = powRes * multRightNodeCalcRes;
-    } else if(multRightNode->GetOperator() == TokenType::kDiv)
+    } else if(multNode->getMultRightNode()->GetOperator() == TokenType::kDiv)
     {
         result = powRes / multRightNodeCalcRes;
     }
     return result;
+}
+
+void Node_MultiplicationRight::setOperator(TokenType type)
+{
+    op = type;
+}
+
+void Node_MultiplicationRight::setMultiplicationNode(QSharedPointer<Node_Multiplication> newMultNode)
+{
+    multNode = newMultNode;
 }
 
 TokenType Node_MultiplicationRight::GetOperator() const

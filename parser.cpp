@@ -181,22 +181,22 @@ QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> 
         type == TokenType::kDiv)
     {
         multiplicationRight->setOperator(type);
-        QSharedPointer<Node_Multiplication> multiplication = mul(input, ++it, bIsExeption);
+        QSharedPointer<Node_Multiplication> multiplication = mult(input, ++it, bIsExeption);
         if(bIsExeption)
         {
             return nullptr;
         }
         else
         {
-            if(expression == nullptr)
+            if(multiplication == nullptr)
             {
                 bIsExeption = true;
                 return nullptr;
             }
             else
             {
-                expressionRight->setRightExprNode(expression);
-                return expressionRight;
+                multiplicationRight->setMultNode(multiplication);
+                return multiplicationRight;
             }
         }
     }
