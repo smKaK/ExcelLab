@@ -233,7 +233,7 @@ QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<To
             else
             {
                 powerNode->setTermNode(termNode);
-                
+
                 QSharedPointer<Node_PowerRight> powerRightNode = powerRight(input, ++it, bIsExeption);
                 if(bIsExeption)
                 {
@@ -312,7 +312,7 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
         }
     }
     else if(type == TokenType::kCell)
-    { 
+    {
             QSharedPointer<Node_CellLink> cellNode = termCell(input, it, bIsExeption);
             if(bIsExeption)
             {
@@ -324,10 +324,63 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
                 return termNode;
             }
      }
-    else if()
+    else if(type == TokenType:: kMin ||
+            type == TokenType:: kMax)
     {
-        
+        QSharedPointer<Node_FuncWith2Args> funcNode = termFunc2Args(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(funcNode, type);
+            return termNode;
+        }
     }
-     
+    else if(type == TokenType:: kDec ||
+            type == TokenType:: kInc)
+    {
+        QSharedPointer<Node_FuncWith1Arg> funcNode = termFunc1Arg(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(funcNode, type);
+            return termNode;
+        }
+    }
+
+    else if(type == TokenType:: kPlus ||
+            type == TokenType:: kMinus)
+    {
+        QSharedPointer<Node_UnaryOperator> unOpNode = termUnOp(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(unOpNode, type);
+            return termNode;
+        }
+    }
+
     
+}
+
+QSharedPointer<Node_Number> Parser::termNum(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    QSharedPointer<Node_Number> numNode(new Node_Number);
+    numNode->setLexema(it->GetLexema()); 
+    return numNode;
+}
+
+QSharedPointer<Node_CellLink> Parser::termCell(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    QSharedPointer<Node_Number> cellNode(new Node_CellLink);
+    cellNode->setLexema(it->GetLexema());
+    return  cellNode;
 }

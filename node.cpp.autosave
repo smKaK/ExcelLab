@@ -285,7 +285,17 @@ cpp_int Node_Number::calculate(const Cell* parentCell)
     return (numLexema).toInt();
 }
 
+void Node_Number::setLexema(const QString &newNumLexema)
+{
+    numLexema = newNumLexema;
+}
+
 //Node_CellLink/////////////////////////////////////////////////////////////////////
+void Node_CellLink::setCellLink(const QString &newCellLink)
+{
+    cellLink = newCellLink;
+}
+
 cpp_int Node_CellLink::calculate(const Cell* parentCell)
 {
     QString column;
@@ -312,9 +322,9 @@ cpp_int Node_CellLink::calculate(const Cell* parentCell)
 //Node_Term//////////////////////////////////////////////////////////////////////////
 Node_Term::Node_Term(TokenType op) : op(op)
 {
-    
+
 }
- 
+
 void Node_Term::setNode(QSharedPointer<Node> newNode, TokenType type)
 {
        termNode = newNode;
@@ -377,4 +387,9 @@ boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCe
 boost::multiprecision::cpp_int Node_ExpressionWithBrackets::calculate(const Cell *parentCell)
 {
     return expression->calculate(parentCell);
+}
+//Node_UnaryOperator/////////////////////////////////////////////////////////////////////////////////////////////
+boost::multiprecision::cpp_int Node_UnaryOperator::calculate(const Cell *parentCell)
+{
+    
 }

@@ -195,7 +195,7 @@ QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> 
             }
             else
             {
-                multiplicationRight->setMultNode(multiplication);
+                multiplicationRight->setMultiplicationNode(multiplication);
                 return multiplicationRight;
             }
         }
@@ -211,7 +211,162 @@ QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> 
     }
 }
 
-QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector::const_iterator &it, bool &bIsExeption)
+QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
+    QSharedPointer<Node_Power> powerNode(new Node_Power());
+    TokenType type = it->getType();
+    if(type == TokenType::kNum  ||
+       type == TokenType::kMin  ||
+       type == TokenType::kMax  ||
+       type == TokenType::kCell ||
+       type == TokenType::kLb   ||
+       type == TokenType::kInc  ||
+       type == TokenType::kDec  ||
+       type == TokenType::kPlus ||
+       type == TokenType::kMinus)
+    {
+            QSharedPointer<Node_Term> termNode = term(input, it, bIsExeption);
+            if(bIsExeption)
+            {
+                return nullptr;
+            }
+            else
+            {
+                powerNode->setTermNode(termNode);
+
+                QSharedPointer<Node_PowerRight> powerRightNode = powerRight(input, ++it, bIsExeption);
+                if(bIsExeption)
+                {
+                    return nullptr;
+                }
+                else
+                {
+                    powerNode->setPowerRightNode(powerRightNode);
+                    return powerNode;
+                }
+            }
+    }
+    else if(type == TokenType::kEof)
+    {
+        return nullptr;
+    }
+    else
+    {
+        bIsExeption = true;
+        return nullptr;
+    }
+}
+
+QSharedPointer<Node_PowerRight> Parser::powerRight(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    QSharedPointer<Node_PowerRight> powerRightNode(new Node_PowerRight());
+    TokenType type = it->getType();
+    if( type == TokenType::kPow)
+    {
+        powerRightNode->setOperator(type);
+        QSharedPointer<Node_Power> powerNode = power(input, ++it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            if(powerNode == nullptr)
+            {
+                bIsExeption = true;
+                return nullptr;
+            }
+            else
+            {
+                powerRightNode->setPowerNode(powerNode);
+                return powerRightNode;
+            }
+        }
+    }
+    else if(type == TokenType::kEof)
+    {
+        return nullptr;
+    }
+    else
+    {
+        bIsExeption = true;
+        return nullptr;
+    }
+}
+
+QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    QSharedPointer<Node_Term> termNode(new Node_Term);
+    TokenType type = it->getType();
+    if(type == TokenType::kNum)
+    {
+        QSharedPointer<Node_Number> numberNode = termNum(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(numberNode, type);
+            return termNode;
+        }
+    }
+    else if(type == TokenType::kCell)
+    {
+            QSharedPointer<Node_CellLink> cellNode = termCell(input, it, bIsExeption);
+            if(bIsExeption)
+            {
+                return nullptr;
+            }
+            else
+            {
+                termNode->setNode(cellNode, type);
+                return termNode;
+            }
+     }
+    else if(type == TokenType:: kMin ||
+            type == TokenType:: kMax)
+    {
+        QSharedPointer<Node_FuncWith2Args> funcNode = termFunc2Args(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(funcNode, type);
+            return termNode;
+        }
+    }
+    else if(type == TokenType:: kDec ||
+            type == TokenType:: kInc)
+    {
+        QSharedPointer<Node_FuncWith1Arg> funcNode = termFunc1Arg(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(funcNode, type);
+            return termNode;
+        }
+    }
+
+    else if(type == TokenType:: kPlus ||
+            type == TokenType:: kMinus)
+    {
+        QSharedPointer<Node_UnaryOperator> unOpNode = termFunc1Arg(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else
+        {
+            termNode->setNode(unOpNode, type);
+            return termNode;
+        }
+    }
+
 
 }

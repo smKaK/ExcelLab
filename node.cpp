@@ -217,6 +217,16 @@ cpp_int Node_Power::calculate(const Cell* parentCell)
     return result;
 }
 
+void Node_Power::setTermNode(QSharedPointer<Node_Term> newTermNode)
+{
+    termNode = newTermNode;
+}
+
+void Node_Power::setPowerRightNode(QSharedPointer<Node_PowerRight> newPowerRightNode)
+{
+    powerRightNode = newPowerRightNode;
+}
+
 //Node_PowerRight////////////////////////////////////////////////////////////////////
  cpp_int Node_PowerRight::power(cpp_int base, cpp_int pow) const
 {
@@ -259,6 +269,16 @@ TokenType Node_PowerRight::GetOperator() const
     return op;
 }
 
+void Node_PowerRight::setOperator(TokenType type)
+{
+    op = type;
+}
+
+void Node_PowerRight::setPowerNode(QSharedPointer<Node_Power> newPowerNode)
+{
+    powerNode = newPowerNode;
+}
+
 //Node_Number///////////////////////////////////////////////////////////////////////
 cpp_int Node_Number::calculate(const Cell* parentCell)
 {
@@ -293,6 +313,12 @@ cpp_int Node_CellLink::calculate(const Cell* parentCell)
 Node_Term::Node_Term(TokenType op) : op(op)
 {
 
+}
+
+void Node_Term::setNode(QSharedPointer<Node> newNode, TokenType type)
+{
+       termNode = newNode;
+       termType = type;
 }
 
 cpp_int Node_Term::calculate(const Cell* parentCell)

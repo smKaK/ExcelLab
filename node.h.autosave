@@ -153,25 +153,30 @@ class Node_Number : public Node
 {
 public:
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
+     Node_Number( );
+     void setLexema(const QString& newNumLexema);
 private:
     TokenType token;
     QString numLexema;
-    Node_Number( );
+    
 
 };
 
 class Node_CellLink : public Node
 {
 public:
+    Node_CellLink( );
+    void setCellLink(const QString& newCellLink);
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
 private:
 
     TokenType token;
     QString cellLink;
-    Node_CellLink( );
-
+     
+    
 };
 
+ 
 class Node_FuncWith2Args : public Node{
 public:
     Node_FuncWith2Args(TokenType function);
@@ -200,6 +205,14 @@ public:
      virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
 };
 
+class Node_UnaryOperator : public Node
+{
+private:
+    TokenType op;
+    QSharedPointer<Node_Term> termNode;
+public:
+     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell) override;
+};
 #endif // NODE_H
 
 
