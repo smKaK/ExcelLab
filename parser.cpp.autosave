@@ -7,9 +7,11 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
      QVector<Token>::const_iterator it = inputTokens.begin();
 
      QSharedPointer<Node_Statement>  tree;
-     tree = stmt(inputTokens, it, tree->getIsExeption());
-     
-     return tree;      
+
+     tree = stmt(inputTokens, it, tree->bIsExeption);
+
+     return tree;
+
 }
 
 QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
@@ -26,19 +28,21 @@ QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector
         type == TokenType::kPlus ||
         type == TokenType::kMinus)
     {
-     QSharedPointer<Node_Expression> expressionNode = expr(input, it, bIsExeption);
-     if(bIsExeption)
+        QSharedPointer<Node_Expression> expressionNode = expr(input, it, bIsExeption);
+        statement->setExpressionNode(expressionNode);
+        return statement;
+     }
+     else if( type == TokenType::kEof)
      {
          statement->setExpressionNode(nullptr);
          return statement;
-     } else 
-     {
-         statement->setExpressionNode(expressionNode);
      }
-    }
-   
-        return statement;
-     
+     else
+     {
+         bIsExeption = true;
+         statement->setExpressionNode(nullptr);
+         return statement;
+     }
 }
 
 QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
@@ -58,16 +62,65 @@ QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVecto
          QSharedPointer<Node_Multiplication> multiplicationNode = mult(input, it, bIsExeption);
          if(bIsExeption)
          {
-             expression->setMultNode(nullptr);
-             return expression;
-         } else 
+             return nullptr;
+         }
+         else
          {
              expression->setMultNode(multiplicationNode);
+             QSharedPointer<Node_ExpressionRight> exprRightNode = exprRight(input, ++it, bIsExeption);
+             if(bIsExeption)
+             {
+                 return nullptr;
+             }
+             else
+             {
+                 expression->setRightExprNode(exprRightNode);
+                 return expression;
+             }
          }
      }
- 
-    
-    
-    return expression;     
- }   
-   
+     else if(type == TokenType::kEof)
+    {
+        return nullptr;
+    }
+     else
+     {
+        bIsExeption = true;
+        return nullptr;
+     }
+}
+
+QSharedPointer<Node_ExpressionRight> Parser::exprRight(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
+{
+    QSharedPointer<Node_ExpressionRight> expressionRight(new Node_ExpressionRight());
+    if(it->getType() == TokenType::kPlus || it->getType() == TokenType::kMinus)
+    {
+        expressionRight->setOperator(it->getType());
+        QSharedPointer<Node_Expression> expression = expr(input, it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else 
+        {
+            if(expression == nullptr)
+            {
+                bIsExeption = true;
+                return nullptr;
+            }
+            else 
+            {    
+                expressionRight->setRightExprNode(expression);   
+            }
+        }
+    }
+    else if(it->getType() == TokenType::kEof)
+    {
+        
+    }
+    else 
+    {
+        bisExeption = true;
+        return nullptr;
+    }
+}

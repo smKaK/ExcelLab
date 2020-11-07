@@ -16,6 +16,8 @@ private:
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_Expression> expr(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
+    static QSharedPointer<Node_ExpressionRight> exprRight(const QVector<Token>& input,
+                               QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_Multiplication> mult(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
 

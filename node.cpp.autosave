@@ -9,11 +9,7 @@
 using cpp_int = boost::multiprecision::cpp_int;
 
 
-
-bool &Node_Statement::getIsExeption()
-{
-    return bIsExeption;
-}
+ 
 
 Node_Statement::Node_Statement( ) : Node()
 {
@@ -28,9 +24,14 @@ cpp_int Node_Statement::calculate(const Cell* parentCell)
     // return exprNode->calculate(parentCell);
 }
 
-void Node_Statement::setExpressionNode(const QSharedPointer<Node> &newExprNode)
+void Node_Statement::setExpressionNode(const QSharedPointer<Node_Expression> &newExprNode)
 {
     exprNode =  newExprNode;
+}
+
+QSharedPointer<Node_Expression> Node_Statement::getExpressionNode() const
+{
+    return this->exprNode;
 }
 
 
@@ -57,8 +58,23 @@ cpp_int  Node_ExpressionRight::calculate(const Cell* parentCell)
 
  TokenType Node_ExpressionRight::GetOperator()
 {
-    return op;
-}
+     return op;
+ }
+ 
+ void Node_ExpressionRight::setOperator(TokenType newOp)
+ {
+     this->op = newOp;
+ }
+ 
+ void Node_ExpressionRight::setMultNode(QSharedPointer<Node_Multiplication> newMultNode)
+ {
+     this->multNode = newMultNode;
+ }
+ 
+ void Node_ExpressionRight::setRightExprNode(QSharedPointer<Node_Expression> newRightExprNode)
+ {
+     this->exprRightNode = newRightExprNode;
+ }
 
 //Node Expression/////////////////////////////////////////////////////////////////////
 cpp_int Node_Expression::calculate(const Cell* parentCell)
@@ -80,6 +96,16 @@ cpp_int Node_Expression::calculate(const Cell* parentCell)
 void Node_Expression::setMultNode(QSharedPointer<Node_Multiplication> newMultNode)
 {
     multNode = newMultNode;
+}
+
+void Node_Expression::setRightExprNode(QSharedPointer<Node_Expression> newRightExprNode)
+{
+    this->exprRightNode = newRightExprNode;
+}
+
+QSharedPointer<Node_ExpressionRight> Node_Expression::getExprRight()
+{
+    return this->exprRightNode;
 }
 
 //Node_Multiplication/////////////////////////////////////////////////////////////////
