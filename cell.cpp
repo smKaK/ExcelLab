@@ -22,7 +22,7 @@ void Cell::setDirty()
     cacheIsDirty = true;
 }
 
-QVariant Cell::getAnotherCellData(int row, int column)
+QVariant Cell::getAnotherCellData(int row, int column) const
 {
     return this->tableWidget()->item(row, column)->text();
 }

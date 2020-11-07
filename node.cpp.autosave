@@ -2,18 +2,18 @@
 #include <cmath>
 #include <QDebug>
 #include <cmath>
-#include <algorithm>    
+#include <algorithm>
 
 //Node statement//////////////////////////////////////////////////////////////////////
 
 using cpp_int = boost::multiprecision::cpp_int;
 
 
- 
+
 
 Node_Statement::Node_Statement( ) : Node()
 {
-    
+
 }
 
 
@@ -43,15 +43,15 @@ QSharedPointer<Node_Expression> Node_Statement::getExpressionNode() const
 cpp_int  Node_ExpressionRight::calculate(const Cell* parentCell)
 {
     cpp_int result(0);
-    cpp_int multRes(multNode->calculate(parentCell));
-    cpp_int exprRightNodeCalcRes = exprRightNode->calculate(parentCell);
-    if(exprRightNode->GetOperator() == TokenType::kPlus)
+    cpp_int multRes(exprNode->getMultNode()->calculate(parentCell));
+    cpp_int exprNodeCalcRes = exprNode->calculate(parentCell);
+    if(exprNode->getExprRight()->GetOperator() == TokenType::kPlus)
     {
-        result = multRes +  exprRightNodeCalcRes;
+        result = multRes +  exprNodeCalcRes;
     }
-    else if(exprRightNode->GetOperator() == TokenType::kMinus)
+    else if(exprNode->getExprRight()->GetOperator() == TokenType::kMinus)
     {
-        result = multRes - exprRightNodeCalcRes;
+        result = multRes - exprNodeCalcRes;
     }
     return result;
 }
@@ -60,20 +60,16 @@ cpp_int  Node_ExpressionRight::calculate(const Cell* parentCell)
 {
      return op;
  }
- 
+
  void Node_ExpressionRight::setOperator(TokenType newOp)
  {
      this->op = newOp;
  }
- 
- void Node_ExpressionRight::setMultNode(QSharedPointer<Node_Multiplication> newMultNode)
- {
-     this->multNode = newMultNode;
- }
- 
+
+
  void Node_ExpressionRight::setRightExprNode(QSharedPointer<Node_Expression> newRightExprNode)
  {
-     this->exprRightNode = newRightExprNode;
+     this->exprNode = newRightExprNode;
  }
 
 //Node Expression/////////////////////////////////////////////////////////////////////
@@ -103,6 +99,11 @@ void Node_Expression::setRightExprNode(QSharedPointer<Node_Expression> newRightE
     this->exprRightNode = newRightExprNode;
 }
 
+QSharedPointer<Node_Multiplication> Node_Expression::getMultNode()
+{
+    return multNode;
+}
+
 QSharedPointer<Node_ExpressionRight> Node_Expression::getExprRight()
 {
     return this->exprRightNode;
@@ -125,13 +126,33 @@ cpp_int Node_Multiplication::calculate(const Cell* parentCell)
     return result ;
 }
 
+void Node_Multiplication::setPowerNode(QSharedPointer<Node_Power> newPowerNode)
+{
+    powerNode = newPowerNode;
+}
+
+void Node_Multiplication::setMultRightNode(QSharedPointer<Node_MultiplicationRight> newMultRightNode)
+{
+    multRightNode = newMultRightNode;
+}
+
+QSharedPointer<Node_Power> Node_Multiplication::getPowerNode()
+{
+    return powerNode;
+}
+
+QSharedPointer<Node_Multiplication> Node_Multiplication::getMultNode()
+{
+    return mu
+}
+
 //Node_MultiplicationRight////////////////////////////////////////////////////////////
 
 cpp_int Node_MultiplicationRight::calculate(const Cell* parentCell)
 {
     cpp_int result(0);
-    cpp_int powRes =  powerNode->calculate(parentCell);
-    cpp_int multRightNodeCalcRes =  multRightNode->calculate(parentCell);
+    cpp_int powRes =  multNode->getPowerNode()->calculate(parentCell);
+    cpp_int multRightNodeCalcRes =  multNode->calculate(parentCell);
     if(multRightNode->GetOperator() == TokenType::kStar)
     {
         result = powRes * multRightNodeCalcRes;
@@ -140,6 +161,16 @@ cpp_int Node_MultiplicationRight::calculate(const Cell* parentCell)
         result = powRes / multRightNodeCalcRes;
     }
     return result;
+}
+
+void Node_MultiplicationRight::setOperator(TokenType type)
+{
+    op = type;
+}
+
+void Node_MultiplicationRight::setMultiplicationNode(QSharedPointer<Node_Multiplication> newMultNode)
+{
+    multNode = newMultNode;
 }
 
 TokenType Node_MultiplicationRight::GetOperator() const
@@ -243,41 +274,41 @@ cpp_int Node_CellLink::calculate(const Cell* parentCell)
     {
         if(cellLink[i].unicode() >= QChar('A').unicode() && cellLink[i].unicode() <= QChar('Z').unicode())
         {
-           column.push_back(cellLink[i]); 
+           column.push_back(cellLink[i]);
         } else {
-           row.push_back(cellLink[i]); 
+           row.push_back(cellLink[i]);
         }
     }
     int rowNum = row.toInt();
     int columnNum = 0;
     for(int i = column.length()-1; i >= 0; --i)
     {
-        columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1); 
+        columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1);
     }
-    
+
     return cpp_int(parentCell->getAnotherCellData(rowNum, columnNum).toString().toStdString());
 }
 
 //Node_Term//////////////////////////////////////////////////////////////////////////
 Node_Term::Node_Term(TokenType op) : op(op)
 {
-    
+
 }
 
 cpp_int Node_Term::calculate(const Cell* parentCell)
 {
     if(this->op == TokenType::kPlus)
     {
-        return termNode->calculate(parentCell) * 1;    
+        return termNode->calculate(parentCell) * 1;
     } else if(this->op == TokenType::kMin){
         return termNode->calculate(parentCell) * (-1);
     }
-      
+
 }
 //Node_FuncWith2Args//////////////////////////////////////////////////////////////////////////////////////////////
 Node_FuncWith2Args::Node_FuncWith2Args(TokenType function) : function(function)
 {
-    
+
 }
 
 boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentCell)
@@ -287,8 +318,8 @@ boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentC
     if(function == TokenType::kMax)
     {
         return std::max(arg1, arg2);
-    } 
-    else 
+    }
+    else
     {
         return std::min(arg1,arg2);
     }
@@ -297,7 +328,7 @@ boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentC
 
 Node_FuncWith1Arg::Node_FuncWith1Arg(TokenType function) : function(function)
 {
-    
+
 }
 
 boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCell)
@@ -306,15 +337,15 @@ boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCe
     if(function == TokenType::kDec)
     {
         return --arg1;
-    } 
-    else 
-    {
-        return ++arg1;  
     }
-            
-        
+    else
+    {
+        return ++arg1;
+    }
+
+
 }
-    
+
 
 //Node_ExpressionWithBrackets///////////////////////////////////////////////////////////////////////////////////
 boost::multiprecision::cpp_int Node_ExpressionWithBrackets::calculate(const Cell *parentCell)

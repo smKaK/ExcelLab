@@ -8,7 +8,7 @@ Token::Token() : lexema(QString())
     type = TokenType::kUnd;
 }
 
-Token::Token(const QString& lexema) : lexema(lexema)
+Token::Token(const QString& lexema, TokenType type) : lexema(lexema), type(type)
 {
     static const QRegExp numberRegExp("0|[1-9][0-9]*");
     static const QRegExp cellRegExp("[A-Z]+[1-9][0-9]*");
@@ -44,9 +44,9 @@ Token::Token(const QString& lexema) : lexema(lexema)
         setType(TokenType::kInc);
     } else if(cellRegExp.exactMatch(lexema))
     {
-        setType(TokenType::kInc);
+        setType(TokenType::kCell);
     } else {
-        throw(std::invalid_argument("Invalid formula"));
+        setType(TokenType::kUnd);
     }
 }
 
@@ -58,6 +58,11 @@ QString Token::GetLexema() const
 void Token::setType(TokenType newType)
 {
     type = newType;
+}
+
+TokenType Token::getType() const
+{
+    return type;
 }
 
 

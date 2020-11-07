@@ -11,6 +11,7 @@ enum class TokenType
     kStar,
     kDiv,
     kPow,
+    kCell,
     kNum,
     kMin,
     kMax,
@@ -18,7 +19,8 @@ enum class TokenType
     kDec,
     kLb,
     kRb,
-    kUnd
+    kUnd,
+    kEof
 };
 
 class Token
@@ -27,9 +29,10 @@ class Token
 public:
 
     Token();
-    Token(const QString& lexema);
+    Token(const QString& lexema, TokenType type = TokenType::kUnd);
     QString GetLexema() const;
     void setType(TokenType newType);
+    TokenType getType() const;
 
 private:
 
