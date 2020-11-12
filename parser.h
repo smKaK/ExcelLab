@@ -36,6 +36,8 @@ private:
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_FuncWith1Arg>    termFunc1Arg(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
+//    static QSharedPointer<Node_UnaryOperator>   termUnOp(const QVector<Token>& input,
+//                               QVector<Token>::const_iterator& it, bool& bIsExeption);
 
 
 
@@ -43,3 +45,4 @@ private:
 
 
 #endif // PARSER_H
+

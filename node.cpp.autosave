@@ -20,8 +20,8 @@ Node_Statement::Node_Statement( ) : Node()
 cpp_int Node_Statement::calculate(const Cell* parentCell)
 {
     qDebug() << "calculate";
+    exprNode->calculate(parentCell);
     return 1000;
-    // return exprNode->calculate(parentCell);
 }
 
 void Node_Statement::setExpressionNode(const QSharedPointer<Node_Expression> &newExprNode)
@@ -72,6 +72,11 @@ cpp_int  Node_ExpressionRight::calculate(const Cell* parentCell)
      this->exprNode = newRightExprNode;
  }
 
+ Node_ExpressionRight::Node_ExpressionRight()
+ {
+
+ }
+
 //Node Expression/////////////////////////////////////////////////////////////////////
 cpp_int Node_Expression::calculate(const Cell* parentCell)
 {
@@ -94,7 +99,7 @@ void Node_Expression::setMultNode(QSharedPointer<Node_Multiplication> newMultNod
     multNode = newMultNode;
 }
 
-void Node_Expression::setRightExprNode(QSharedPointer<Node_Expression> newRightExprNode)
+void Node_Expression::setRightExprNode(QSharedPointer<Node_ExpressionRight> newRightExprNode)
 {
     this->exprRightNode = newRightExprNode;
 }
@@ -107,6 +112,11 @@ QSharedPointer<Node_Multiplication> Node_Expression::getMultNode()
 QSharedPointer<Node_ExpressionRight> Node_Expression::getExprRight()
 {
     return this->exprRightNode;
+}
+
+Node_Expression::Node_Expression()
+{
+
 }
 
 //Node_Multiplication/////////////////////////////////////////////////////////////////
@@ -146,6 +156,11 @@ QSharedPointer<Node_MultiplicationRight> Node_Multiplication::getMultRightNode()
     return multRightNode;
 }
 
+Node_Multiplication::Node_Multiplication()
+{
+
+}
+
 //Node_MultiplicationRight////////////////////////////////////////////////////////////
 
 cpp_int Node_MultiplicationRight::calculate(const Cell* parentCell)
@@ -176,6 +191,11 @@ void Node_MultiplicationRight::setMultiplicationNode(QSharedPointer<Node_Multipl
 TokenType Node_MultiplicationRight::GetOperator() const
 {
     return op;
+}
+
+Node_MultiplicationRight::Node_MultiplicationRight()
+{
+
 }
 
 //Node_Power//////////////////////////////////////////////////////////////////////////
@@ -227,6 +247,11 @@ void Node_Power::setPowerRightNode(QSharedPointer<Node_PowerRight> newPowerRight
     powerRightNode = newPowerRightNode;
 }
 
+Node_Power::Node_Power()
+{
+
+}
+
 //Node_PowerRight////////////////////////////////////////////////////////////////////
  cpp_int Node_PowerRight::power(cpp_int base, cpp_int pow) const
 {
@@ -254,14 +279,10 @@ void Node_Power::setPowerRightNode(QSharedPointer<Node_PowerRight> newPowerRight
 
 cpp_int Node_PowerRight::calculate(const Cell* parentCell)
 {
-    cpp_int result(0);
-    cpp_int termRes(termNode->calculate(parentCell));
-    cpp_int powerRightNodeCalcRes =  powerRightNode->calculate(parentCell);
-    if(powerRightNode->GetOperator() == TokenType::kPow)
-    {
-        result = power(termRes, powerRightNodeCalcRes);
-    }
-    return result;
+
+    cpp_int powerNodeCalcRes =  powerNode->calculate(parentCell);
+
+    return powerNodeCalcRes;
 }
 
 TokenType Node_PowerRight::GetOperator() const
@@ -279,23 +300,38 @@ void Node_PowerRight::setPowerNode(QSharedPointer<Node_Power> newPowerNode)
     powerNode = newPowerNode;
 }
 
+Node_PowerRight::Node_PowerRight()
+{
+
+}
+
 //Node_Number///////////////////////////////////////////////////////////////////////
 cpp_int Node_Number::calculate(const Cell* parentCell)
 {
     return (numLexema).toInt();
 }
 
-void Node_Number::setLexema(const QString &newNumLexema)
+Node_Number::Node_Number()
 {
-    numLexema = newNumLexema;
+
+}
+
+TokenType Node_Number::getTokenType()
+{
+    return this->type;
+}
+
+QString Node_Number::getLexema()
+{
+    return this->numLexema;
+}
+
+void Node_Number::setLexema(const QString &newLexema)
+{
+    this->numLexema = newLexema;
 }
 
 //Node_CellLink/////////////////////////////////////////////////////////////////////
-void Node_CellLink::setCellLink(const QString &newCellLink)
-{
-    cellLink = newCellLink;
-}
-
 cpp_int Node_CellLink::calculate(const Cell* parentCell)
 {
     QString column;
@@ -387,9 +423,4 @@ boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCe
 boost::multiprecision::cpp_int Node_ExpressionWithBrackets::calculate(const Cell *parentCell)
 {
     return expression->calculate(parentCell);
-}
-//Node_UnaryOperator/////////////////////////////////////////////////////////////////////////////////////////////
-boost::multiprecision::cpp_int Node_UnaryOperator::calculate(const Cell *parentCell)
-{
-    
 }

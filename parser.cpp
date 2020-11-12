@@ -6,7 +6,7 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 {
      QVector<Token>::const_iterator it = inputTokens.begin();
 
-     QSharedPointer<Node_Statement>  tree;
+     QSharedPointer<Node_Statement>  tree(new Node_Statement);
 
      tree = stmt(inputTokens, it, tree->bIsExeption);
 
@@ -47,7 +47,7 @@ QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector
 
 QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
 {
-   QSharedPointer<Node_Expression> expression(new Node_Expression());
+   QSharedPointer<Node_Expression> expression(new Node_Expression);
     TokenType type = it->getType();
     if(type == TokenType::kNum  ||
        type == TokenType::kMin  ||
@@ -92,7 +92,7 @@ QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVecto
 
 QSharedPointer<Node_ExpressionRight> Parser::exprRight(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
 {
-    QSharedPointer<Node_ExpressionRight> expressionRight(new Node_ExpressionRight());
+    QSharedPointer<Node_ExpressionRight> expressionRight(new Node_ExpressionRight);
     TokenType type = it->getType();
     if( type == TokenType::kPlus ||
         type == TokenType::kMinus)
@@ -130,7 +130,7 @@ QSharedPointer<Node_ExpressionRight> Parser::exprRight(const QVector<Token> &inp
 
 QSharedPointer<Node_Multiplication> Parser::mult(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-    QSharedPointer<Node_Multiplication> multiplication(new Node_Multiplication());
+    QSharedPointer<Node_Multiplication> multiplication(new Node_Multiplication);
     TokenType type = it->getType();
     if(type == TokenType::kNum  ||
             type == TokenType::kMin  ||
@@ -175,7 +175,7 @@ QSharedPointer<Node_Multiplication> Parser::mult(const QVector<Token> &input, QV
 
 QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-    QSharedPointer<Node_MultiplicationRight> multiplicationRight(new Node_MultiplicationRight());
+    QSharedPointer<Node_MultiplicationRight> multiplicationRight(new Node_MultiplicationRight);
     TokenType type = it->getType();
     if( type == TokenType::kStar ||
         type == TokenType::kDiv)
@@ -213,7 +213,7 @@ QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> 
 
 QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-    QSharedPointer<Node_Power> powerNode(new Node_Power());
+    QSharedPointer<Node_Power> powerNode(new Node_Power);
     TokenType type = it->getType();
     if(type == TokenType::kNum  ||
        type == TokenType::kMin  ||
@@ -259,7 +259,7 @@ QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<To
 
 QSharedPointer<Node_PowerRight> Parser::powerRight(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-    QSharedPointer<Node_PowerRight> powerRightNode(new Node_PowerRight());
+    QSharedPointer<Node_PowerRight> powerRightNode(new Node_PowerRight);
     TokenType type = it->getType();
     if( type == TokenType::kPow)
     {
@@ -283,7 +283,10 @@ QSharedPointer<Node_PowerRight> Parser::powerRight(const QVector<Token> &input, 
             }
         }
     }
-    else if(type == TokenType::kEof)
+    else if(type == TokenType::kEof ||
+            type == TokenType::kPlus ||
+            type == TokenType::kStar ||
+            type == TokenType::kMinus)
     {
         return nullptr;
     }
@@ -301,7 +304,7 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
     if(type == TokenType::kNum)
     {
         QSharedPointer<Node_Number> numberNode = termNum(input, it, bIsExeption);
-        if(bIsExeption)
+        if(false)
         {
             return nullptr;
         }
@@ -328,7 +331,7 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
             type == TokenType:: kMax)
     {
         QSharedPointer<Node_FuncWith2Args> funcNode = termFunc2Args(input, it, bIsExeption);
-        if(bIsExeption)
+        if(false)
         {
             return nullptr;
         }
@@ -353,20 +356,46 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
         }
     }
 
-    else if(type == TokenType:: kPlus ||
-            type == TokenType:: kMinus)
-    {
-        QSharedPointer<Node_UnaryOperator> unOpNode = termFunc1Arg(input, it, bIsExeption);
-        if(bIsExeption)
-        {
-            return nullptr;
-        }
-        else
-        {
-            termNode->setNode(unOpNode, type);
-            return termNode;
-        }
-    }
+//    else if(type == TokenType:: kPlus ||
+//            type == TokenType:: kMinus)
+//    {
+//        QSharedPointer<Node_UnaryOperator> unOpNode = termUnOp(input, it, bIsExeption);
+//        if(bIsExeption)
+//        {
+//            return nullptr;
+//        }
+//        else
+//        {
+//            termNode->setNode(unOpNode, type);
+//            return termNode;
+//        }
+//    }
 
 
+}
+
+QSharedPointer<Node_Number> Parser::termNum(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    QSharedPointer<Node_Number> numNode(new Node_Number);
+    numNode->setLexema(it->GetLexema());
+    return numNode;
+
+}
+
+QSharedPointer<Node_CellLink> Parser::termCell(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+//    QSharedPointer<Node_Number> cellNode(new Node_CellLink);
+//    cellNode->setLexema(it->GetLexema());
+//    return  cellNode;
+    return nullptr;
+}
+
+QSharedPointer<Node_FuncWith2Args> Parser::termFunc2Args(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    return nullptr;
+}
+
+QSharedPointer<Node_FuncWith1Arg> Parser::termFunc1Arg(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
+{
+    return nullptr;
 }
