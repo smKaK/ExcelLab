@@ -13,14 +13,14 @@ using cpp_int = boost::multiprecision::cpp_int;
 
 Node_Statement::Node_Statement( ) : Node()
 {
-
+    bIsExeption=false;
 }
 
 
 cpp_int Node_Statement::calculate(const Cell* parentCell)
 {
     qDebug() << "calculate";
-    exprNode->calculate(parentCell);\
+    //exprNode->calculate(parentCell);
     return 1000;
 }
 

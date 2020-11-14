@@ -45,7 +45,12 @@ Token::Token(const QString& lexema, TokenType type) : lexema(lexema), type(type)
     } else if(cellRegExp.exactMatch(lexema))
     {
         setType(TokenType::kCell);
-    } else {
+    }else if(lexema == "Eof")
+    {
+        setType(TokenType::kEof);
+    }
+
+    else {
         setType(TokenType::kUnd);
     }
 }

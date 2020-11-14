@@ -4,7 +4,8 @@
 
 QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 {
-     QVector<Token>::const_iterator it = inputTokens.begin();
+
+    QVector<Token>::const_iterator it = inputTokens.begin();
 
      QSharedPointer<Node_Statement>  tree(new Node_Statement);
 
@@ -67,6 +68,10 @@ QSharedPointer<Node_Expression> Parser::expr(const QVector<Token> &input, QVecto
          else
          {
              expression->setMultNode(multiplicationNode);
+             if(it->getType() == TokenType::kEof){
+                 expression->setRightExprNode(nullptr);
+                 return expression;
+             }
              QSharedPointer<Node_ExpressionRight> exprRightNode = exprRight(input, ++it, bIsExeption);
              if(bIsExeption)
              {
@@ -150,6 +155,10 @@ QSharedPointer<Node_Multiplication> Parser::mult(const QVector<Token> &input, QV
             else
             {
                 multiplication->setPowerNode(powerNode);
+                if(it->getType() == TokenType::kEof){
+                    multiplication->setMultRightNode(nullptr);
+                    return multiplication;
+                }
                 QSharedPointer<Node_MultiplicationRight> multRightNode = multRight(input, ++it, bIsExeption);
                 if(bIsExeption)
                 {
@@ -202,13 +211,19 @@ QSharedPointer<Node_MultiplicationRight> Parser::multRight(const QVector<Token> 
     }
     else if(type == TokenType::kEof)
     {
+
         return nullptr;
     }
     else
     {
-        bIsExeption = true;
+        --it;
         return nullptr;
     }
+//    else
+//    {
+//        bIsExeption = true;
+//        return nullptr;
+//    }
 }
 
 QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
@@ -233,7 +248,10 @@ QSharedPointer<Node_Power> Parser::power(const QVector<Token> &input, QVector<To
             else
             {
                 powerNode->setTermNode(termNode);
-
+                if(it->getType() == TokenType::kEof){
+                    powerNode->setPowerRightNode(nullptr);
+                    return powerNode;
+                }
                 QSharedPointer<Node_PowerRight> powerRightNode = powerRight(input, ++it, bIsExeption);
                 if(bIsExeption)
                 {
@@ -283,18 +301,22 @@ QSharedPointer<Node_PowerRight> Parser::powerRight(const QVector<Token> &input, 
             }
         }
     }
-    else if(type == TokenType::kEof ||
-            type == TokenType::kPlus ||
-            type == TokenType::kStar ||
-            type == TokenType::kMinus)
+    else if(type == TokenType::kEof)
+
     {
+
         return nullptr;
     }
     else
     {
-        bIsExeption = true;
+           --it;
         return nullptr;
     }
+//    else
+//    {
+//        bIsExeption = true;
+//        return nullptr;
+//    }
 }
 
 QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
@@ -304,7 +326,7 @@ QSharedPointer<Node_Term> Parser::term(const QVector<Token> &input, QVector<Toke
     if(type == TokenType::kNum)
     {
         QSharedPointer<Node_Number> numberNode = termNum(input, it, bIsExeption);
-        if(false)
+        if(bIsExeption)
         {
             return nullptr;
         }

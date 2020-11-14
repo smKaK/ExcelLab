@@ -33,6 +33,6 @@ QVector<Token> Lexer::Tokenize(const QString& input)
            v.push_back(buffer);
        }
    }
-           v.push_back(Token(QString(),TokenType::kEof));
+           v.push_back(Token(QString("Eof"),TokenType::kEof));
        return v;
 }
