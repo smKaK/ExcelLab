@@ -52,7 +52,7 @@ QVariant Cell::data(int role) const
 void Cell::setData(int role, const QVariant &value)
 {
     qDebug() << "set value " << value;
-     s = Parser::parse(Lexer::Tokenize("1213 + 123"));
+     s = Parser::parse(Lexer::Tokenize("10*10 - 2^2"));
      val = s->calculate(this).str().data();
      for(auto& el : Lexer::Tokenize("1213 + 123"))
      {

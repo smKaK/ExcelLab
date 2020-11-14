@@ -13,7 +13,7 @@ QVector<Token> Lexer::Tokenize(const QString& input)
        auto it = s.begin();
        while(it != s.end())
        {
-           if(*it == "+" || *it == "-" || *it == "(" || *it == ")" || *it == "*" ||*it == "/" ||*it == ",")
+           if(*it == "+" || *it == "-" || *it == "(" || *it == ")" || *it == "*" ||*it == "/" ||*it == "," ||*it == "^")
            {
                if(buffer.size() > 0)
                {
