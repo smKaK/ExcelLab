@@ -15,7 +15,7 @@ Spreadsheet::Spreadsheet(QWidget* parent)
     autoRecalc = true;
 
     setSelectionMode(ContiguousSelection);
-    setItemPrototype(new Cell);
+    setItemPrototype(new Cell(this));
 
     clear();
 
@@ -24,6 +24,8 @@ Spreadsheet::Spreadsheet(QWidget* parent)
         addRow();
         addColumn();
     }
+
+
     setHeaders();
     connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(SpreadsheetModified()));
 }

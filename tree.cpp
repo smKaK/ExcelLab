@@ -24,9 +24,9 @@ QString Tree::getResut() const
 void Tree::calculate()
 {
 
-    if(head == nullptr)
+    if( head == nullptr ||( head->getExpressionNode() == nullptr && head->bIsExeption == false))
     {
-        result = QString("empty");
+        result = QString("");
     }
     else if (head->bIsExeption == true)
     {

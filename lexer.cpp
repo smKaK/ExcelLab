@@ -18,6 +18,7 @@ QVector<Token> Lexer::Tokenize(const QString& input)
                if(buffer.size() > 0)
                {
                    v.push_back(buffer);
+
                }
                v.push_back(Token(*it));
                buffer.clear();
@@ -31,6 +32,12 @@ QVector<Token> Lexer::Tokenize(const QString& input)
        if(buffer.size() > 0)
        {
            v.push_back(buffer);
+           if(v.back().getType() == TokenType::kUnd)
+           {
+               v.clear();
+               v.push_back(Token("", TokenType::kUnd));
+               return v;
+           }
        }
    }
            v.push_back(Token(QString("Eof"),TokenType::kEof));

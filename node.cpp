@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <cmath>
 #include <algorithm>
-
+#include "cell.h"
 //Node statement//////////////////////////////////////////////////////////////////////
 
 using cpp_int = boost::multiprecision::cpp_int;
@@ -20,17 +20,9 @@ Node_Statement::Node_Statement( ) : Node()
 cpp_int Node_Statement::calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult)
 {
     qDebug() << "calculate";
-    if(bIsExeption == true)
-    {
-        return 0;
-    }
-    else if(exprNode == nullptr)
-    {
-        return  1;
-    }
-    else {
+
         return exprNode->calculate(parentCell);
-    }
+
 }
 
 void Node_Statement::setExpressionNode(const QSharedPointer<Node_Expression> &newExprNode)
@@ -496,6 +488,16 @@ void Node_Number::setLexema(const QString &newLexema)
 }
 
 //Node_CellLink/////////////////////////////////////////////////////////////////////
+Node_CellLink::Node_CellLink()
+{
+
+}
+
+void Node_CellLink::setLink(const QString &newCellLink)
+{
+    cellLink = newCellLink;
+}
+
 cpp_int Node_CellLink::calculate(const Cell* parentCell, cpp_int leftResult)
 {
     QString column;

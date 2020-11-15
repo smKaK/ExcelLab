@@ -3,7 +3,7 @@
 
 #include <QSharedPointer>
 #include <token.h>
-#include "cell.h"
+//#include "cell.h"
 #include <boost/multiprecision/cpp_int.hpp>
 
 class Node_Statement;
@@ -20,6 +20,7 @@ class Node_FuncWith2Args;
 class Node_FuncWith1Arg;
 class Node_ExpressionWithBrackets;
 
+class Cell;
 
 class Node
 {
@@ -168,12 +169,13 @@ private:
 class Node_CellLink : public Node
 {
 public:
+    Node_CellLink();
+    void setLink(const QString& newCellLink);
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 private:
 
     TokenType token;
     QString cellLink;
-    Node_CellLink( );
 
 };
 

@@ -5,12 +5,15 @@
 #include <QDebug>
 #include"tree.h"
 
-Cell::Cell()
+Cell::Cell(QTableWidget* parent)
 {
+    qDebug() << "creating cell";
     setDirty();
     tree = new Tree(this);
-
+    this->parent = parent;
 }
+
+
 
 Cell::~Cell()
 {
@@ -25,13 +28,16 @@ void Cell::setDirty()
 
 QVariant Cell::getAnotherCellData(int row, int column) const
 {
-    return this->tableWidget()->item(row, column)->text();
+    qDebug() << row << " " << column;
+
+    return parent->item(row-1,column-1)->data(Qt::DisplayRole);
 }
 
 QTableWidgetItem *Cell::clone() const
 {
     return new Cell(*this);
 }
+
 
 //QVariant Cell::data(int role) const
 //{
@@ -59,8 +65,6 @@ void Cell::setData(int role, const QVariant &value)
      {
          qDebug() << el.GetLexema();
      }
-     //getValue();
-     //QTableWidgetItem::setData(role, value);
 
     QTableWidgetItem::setData(Qt::DisplayRole, getValue());
     if (role == Qt::EditRole)

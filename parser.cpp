@@ -18,8 +18,6 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
 {
 
-    //check if undefined contains!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!;
-
     QSharedPointer<Node_Statement> statement(new Node_Statement());
      TokenType type = it->getType();
      if(type == TokenType::kNum  ||
@@ -412,10 +410,10 @@ QSharedPointer<Node_Number> Parser::termNum(const QVector<Token> &input, QVector
 
 QSharedPointer<Node_CellLink> Parser::termCell(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-//    QSharedPointer<Node_Number> cellNode(new Node_CellLink);
-//    cellNode->setLexema(it->GetLexema());
-//    return  cellNode;
-    return nullptr;
+   QSharedPointer<Node_CellLink> cellNode(new Node_CellLink);
+   cellNode->setLink(it->GetLexema());
+   return  cellNode;
+
 }
 
 QSharedPointer<Node_FuncWith2Args> Parser::termFunc2Args(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
