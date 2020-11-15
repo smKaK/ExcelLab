@@ -32,7 +32,8 @@ SOURCES += \
         node.cpp \
         parser.cpp \
         spreadsheet.cpp \
-        token.cpp
+        token.cpp \
+        tree.cpp
 
 HEADERS += \
         cell.h \
@@ -41,7 +42,8 @@ HEADERS += \
         node.h \
         parser.h \
         spreadsheet.h \
-        token.h
+        token.h \
+        tree.h
 
 FORMS += \
         mainwindow.ui

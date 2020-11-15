@@ -3,17 +3,18 @@
 #include "parser.h"
 #include "lexer.h"
 #include <QDebug>
+#include"tree.h"
 
 Cell::Cell()
 {
     setDirty();
-
+    tree = new Tree(this);
 
 }
 
 Cell::~Cell()
 {
-
+    delete tree;
 }
 
 
@@ -32,42 +33,41 @@ QTableWidgetItem *Cell::clone() const
     return new Cell(*this);
 }
 
-QVariant Cell::data(int role) const
-{
+//QVariant Cell::data(int role) const
+//{
 
-        if(role ==Qt::DisplayRole)
-        {
-            QVariant res = this->getValue();
-            if( res.isValid()){
-                return res;
+//        if(role ==Qt::DisplayRole)
+//        {
+//            QVariant res = this->getValue();
+//            if( res.isValid()){
+//                return res;
 
-            } else {
-                 return QVariant("Wrong Input");
-                 }
-        }
-        return QTableWidgetItem::data(role);
+//            } else
+//            {
+//                 return QVariant("Wrong Input");
+//            }
+//        }
+//        return QTableWidgetItem::data(role);
 
-}
+//}
 
 void Cell::setData(int role, const QVariant &value)
 {
     qDebug() << "set value " << value;
-     s = Parser::parse(Lexer::Tokenize("4+8"));
-     val = s->calculate(this).str().data();
-     for(auto& el : Lexer::Tokenize("2*a"))
+     tree->setHead( Parser::parse(Lexer::Tokenize(value.toString())));
+     for(auto& el : Lexer::Tokenize(value.toString()))
      {
          qDebug() << el.GetLexema();
      }
      //getValue();
-    QTableWidgetItem::setData(role, value);
+     //QTableWidgetItem::setData(role, value);
 
-
+    QTableWidgetItem::setData(Qt::DisplayRole, getValue());
     if (role == Qt::EditRole)
         setDirty();
 }
 
 QString Cell::getValue() const
 {
-    qDebug() << "GetValue" << this->row() << ' ' << this->column();
-    return val;
+    return tree->getResut();
 }
