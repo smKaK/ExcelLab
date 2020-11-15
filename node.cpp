@@ -35,7 +35,7 @@ cpp_int Node_Statement::calculate(const Cell* parentCell)
 
 void Node_Statement::setExpressionNode(const QSharedPointer<Node_Expression> &newExprNode)
 {
-    exprNode =  newExprNode;
+    exprNode = newExprNode;
 }
 
 QSharedPointer<Node_Expression> Node_Statement::getExpressionNode() const

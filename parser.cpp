@@ -17,6 +17,9 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 
 QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool& bIsExeption)
 {
+
+    //check if undefined contains!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!;
+
     QSharedPointer<Node_Statement> statement(new Node_Statement());
      TokenType type = it->getType();
      if(type == TokenType::kNum  ||
@@ -31,17 +34,20 @@ QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector
     {
         QSharedPointer<Node_Expression> expressionNode = expr(input, it, bIsExeption);
         statement->setExpressionNode(expressionNode);
+        statement->bIsExeption = bIsExeption;
         return statement;
      }
      else if(type == TokenType::kEof)
      {
          statement->setExpressionNode(nullptr);
+         statement->bIsExeption = bIsExeption;
          return statement;
      }
      else
      {
          bIsExeption = true;
          statement->setExpressionNode(nullptr);
+         statement->bIsExeption = bIsExeption;
          return statement;
      }
 }

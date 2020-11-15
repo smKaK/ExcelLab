@@ -52,9 +52,9 @@ QVariant Cell::data(int role) const
 void Cell::setData(int role, const QVariant &value)
 {
     qDebug() << "set value " << value;
-     s = Parser::parse(Lexer::Tokenize("10*10 - 2^2"));
+     s = Parser::parse(Lexer::Tokenize("4+8"));
      val = s->calculate(this).str().data();
-     for(auto& el : Lexer::Tokenize("1213 + 123"))
+     for(auto& el : Lexer::Tokenize("2*a"))
      {
          qDebug() << el.GetLexema();
      }
