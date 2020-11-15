@@ -11,6 +11,11 @@ using cpp_int = boost::multiprecision::cpp_int;
 
 
 
+QVector<Token>& Node_Statement::getCellLinks()
+{
+    return cellLinks;
+}
+
 Node_Statement::Node_Statement( ) : Node()
 {
     bIsExeption=false;

@@ -11,6 +11,14 @@ QSharedPointer<Node_Statement> Parser::parse(const QVector<Token> &inputTokens)
 
      tree = stmt(inputTokens, it, tree->bIsExeption);
 
+     for(const auto& el : inputTokens)
+     {
+         if(el.getType() == TokenType::kCell)
+         {
+             tree->getCellLinks().push_back(el);
+         }
+     }
+
      return tree;
 
 }

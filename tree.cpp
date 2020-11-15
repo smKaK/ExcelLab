@@ -34,6 +34,40 @@ void Tree::calculate()
      }
     else
     {
-         result = head->calculate(parentCell).str().data();
+        bool isEmptyCell = false;
+        for(const auto& el : head->getCellLinks())
+        {
+            QString column;
+            QString row;
+            for(int i =0 ; i < el.GetLexema().length(); ++i)
+            {
+                if(el.GetLexema()[i].unicode() >= QChar('A').unicode() && el.GetLexema()[i].unicode() <= QChar('Z').unicode())
+                {
+                   column.push_back(el.GetLexema()[i]);
+                } else {
+                   row.push_back(el.GetLexema()[i]);
+                }
+            }
+            int rowNum = row.toInt();
+            int columnNum = 0;
+            for(int i = column.length()-1; i >= 0; --i)
+            {
+                columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1);
+            }
+
+            if(!parentCell->getParent()->item(rowNum-1,columnNum-1))
+            {
+                isEmptyCell = true;
+                break;
+            }
+        }
+        if(isEmptyCell)
+        {
+            result = QString("####");
+        }
+        else {
+             result = head->calculate(parentCell).str().data();
+        }
+
     }
 }

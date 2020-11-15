@@ -20,6 +20,7 @@ public:
     QString formula() const;
     void setDirty();
     QVariant getAnotherCellData(int row, int column) const;
+    QTableWidget *getParent();
 private:
     QTableWidget* parent;
     Tree* tree;

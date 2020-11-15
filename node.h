@@ -3,6 +3,8 @@
 
 #include <QSharedPointer>
 #include <token.h>
+#include <QVector>
+
 //#include "cell.h"
 #include <boost/multiprecision/cpp_int.hpp>
 
@@ -35,9 +37,10 @@ class Node_Statement : public Node
 private:
     Cell* parentCell;
     QSharedPointer<Node_Expression> exprNode;
+    QVector<Token> cellLinks;
 
 public:
-
+    QVector<Token>& getCellLinks();
     bool bIsExeption;
     Node_Statement();
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;

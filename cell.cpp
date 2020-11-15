@@ -31,6 +31,7 @@ QVariant Cell::getAnotherCellData(int row, int column) const
     qDebug() << row << " " << column;
 
     return parent->item(row-1,column-1)->data(Qt::DisplayRole);
+
 }
 
 QTableWidgetItem *Cell::clone() const
@@ -74,4 +75,9 @@ void Cell::setData(int role, const QVariant &value)
 QString Cell::getValue() const
 {
     return tree->getResut();
+}
+
+QTableWidget* Cell::getParent()
+{
+    return parent;
 }
