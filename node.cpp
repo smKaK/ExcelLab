@@ -569,14 +569,24 @@ boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentC
 }
 //Node_FuncWith1Arg/////////////////////////////////////////////////////////////////////////////////////////////
 
+Node_FuncWith1Arg::Node_FuncWith1Arg()
+{
+
+}
+
 Node_FuncWith1Arg::Node_FuncWith1Arg(TokenType function) : function(function)
 {
 
 }
 
+void Node_FuncWith1Arg::setExprWithBr(QSharedPointer<Node_ExpressionWithBrackets> newExprWithBrackets)
+{
+    expressionWithBrackets = newExprWithBrackets;
+}
+
 boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCell, cpp_int leftResult)
 {
-    cpp_int arg1 = expression->calculate(parentCell);
+    cpp_int arg1 = expressionWithBrackets->calculate(parentCell);
     if(function == TokenType::kDec)
     {
         return --arg1;
@@ -591,6 +601,11 @@ boost::multiprecision::cpp_int Node_FuncWith1Arg::calculate(const Cell *parentCe
 
 
 //Node_ExpressionWithBrackets///////////////////////////////////////////////////////////////////////////////////
+void Node_ExpressionWithBrackets::setExpressionNode(QSharedPointer<Node_Expression> newExpression)
+{
+    expression = newExpression;
+}
+
 boost::multiprecision::cpp_int Node_ExpressionWithBrackets::calculate(const Cell *parentCell, cpp_int leftResult)
 {
     return expression->calculate(parentCell);

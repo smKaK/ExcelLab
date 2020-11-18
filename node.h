@@ -195,10 +195,12 @@ private:
 class Node_FuncWith1Arg : public Node{
 
 public:
+    Node_FuncWith1Arg();
     Node_FuncWith1Arg(TokenType function);
+    void setExprWithBr(QSharedPointer<Node_ExpressionWithBrackets> newExprWithBrackets);
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 private:
-    QSharedPointer<Node_Expression> expression;
+    QSharedPointer<Node_ExpressionWithBrackets> expressionWithBrackets;
     TokenType function;
 };
 
@@ -206,7 +208,9 @@ class Node_ExpressionWithBrackets : public Node
 {
 private:
     QSharedPointer<Node_Expression> expression;
+
 public:
+    void setExpressionNode(QSharedPointer<Node_Expression> newExpression);
      virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 };
 

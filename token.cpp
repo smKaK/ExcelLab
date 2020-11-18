@@ -49,7 +49,14 @@ Token::Token(const QString& lexema, TokenType type) : lexema(lexema), type(type)
     {
         setType(TokenType::kEof);
     }
-
+    else if(lexema == "(")
+    {
+        setType(TokenType::kLb);
+    }
+    else if(lexema == ")")
+    {
+        setType(TokenType::kRb);
+    }
     else {
         setType(TokenType::kUnd);
     }
