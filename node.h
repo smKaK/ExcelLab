@@ -186,6 +186,8 @@ class Node_FuncWith2Args : public Node{
 public:
     Node_FuncWith2Args(TokenType function);
     virtual boost::multiprecision::cpp_int calculate(const Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
+    void setExpr1(QSharedPointer<Node_Expression> newExpr1);
+    void setExpr2(QSharedPointer<Node_Expression> newExpr2);
 private:
     QSharedPointer<Node_Expression> expr1;
     QSharedPointer<Node_Expression> expr2;

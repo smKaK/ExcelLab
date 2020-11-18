@@ -12,6 +12,7 @@ enum class TokenType
     kDiv,
     kPow,
     kCell,
+    kComa,
     kNum,
     kMin,
     kMax,

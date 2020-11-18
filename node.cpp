@@ -567,6 +567,17 @@ boost::multiprecision::cpp_int Node_FuncWith2Args::calculate(const Cell *parentC
         return std::min(arg1,arg2);
     }
 }
+
+void Node_FuncWith2Args::setExpr1(QSharedPointer<Node_Expression> newExpr1)
+{
+    expr1 = newExpr1;
+}
+
+void Node_FuncWith2Args::setExpr2(QSharedPointer<Node_Expression> newExpr2)
+{
+    expr2 = newExpr2;
+}
+
 //Node_FuncWith1Arg/////////////////////////////////////////////////////////////////////////////////////////////
 
 Node_FuncWith1Arg::Node_FuncWith1Arg()

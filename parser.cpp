@@ -140,7 +140,8 @@ QSharedPointer<Node_ExpressionRight> Parser::exprRight(const QVector<Token> &inp
         }
     }
     else if(type == TokenType::kEof||
-            type == TokenType::kRb)
+            type == TokenType::kRb ||
+            type == TokenType::kComa)
     {
         return nullptr;
     }
@@ -446,7 +447,46 @@ QSharedPointer<Node_CellLink> Parser::termCell(const QVector<Token> &input, QVec
 
 QSharedPointer<Node_FuncWith2Args> Parser::termFunc2Args(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)
 {
-    return nullptr;
+    TokenType type = it->getType();
+    QSharedPointer<Node_FuncWith2Args> funcWith2Args(new Node_FuncWith2Args(it->getType()));
+
+    ++it;
+    type = it->getType();
+    if(type == TokenType::kLb)
+    {
+        QSharedPointer<Node_Expression> expression1 = expr(input, ++it, bIsExeption);
+        if(bIsExeption)
+        {
+            return nullptr;
+        }
+        else if (it->getType() == TokenType::kComa)
+        {
+
+            QSharedPointer<Node_Expression> expression2 = expr(input, ++it, bIsExeption);
+            if(bIsExeption)
+            {
+                return nullptr;
+            }
+            else
+            {
+                funcWith2Args->setExpr1(expression1);
+                funcWith2Args->setExpr2(expression2);
+                return funcWith2Args;
+            }
+//            exprWithBracketsNode->setExpressionNode(expression);
+//            return exprWithBracketsNode;
+        }
+        else
+        {
+            bIsExeption = true;
+            return nullptr;
+        }
+    }
+    else
+    {
+        bIsExeption = true;
+        return nullptr;
+    }
 }
 
 QSharedPointer<Node_FuncWith1Arg> Parser::termFunc1Arg(const QVector<Token> &input, QVector<Token>::const_iterator &it, bool &bIsExeption)

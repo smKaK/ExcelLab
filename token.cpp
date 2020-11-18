@@ -57,6 +57,10 @@ Token::Token(const QString& lexema, TokenType type) : lexema(lexema), type(type)
     {
         setType(TokenType::kRb);
     }
+    else if(lexema == ",")
+    {
+        setType(TokenType::kComa);
+    }
     else {
         setType(TokenType::kUnd);
     }
