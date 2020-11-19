@@ -169,7 +169,30 @@ bool Spreadsheet::readFile(const QString &fileName)
     do
     {
         reader.readNext();
-        qDebug() << "iTERATION";
+//        if(reader.name() == "cell")
+//        {
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//            int row = reader.text().toInt();
+//            qDebug() << row;
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//            int column = reader.text().toInt();
+//            qDebug() << column;
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//            QString formula = reader.text().toString();
+//            qDebug() << formula;
+//            reader.readNext();
+//            reader.readNext();
+//            reader.readNext();
+//        }
+        //qDebug() << reader.name() <<" " << reader.text();
         if(reader.name() == "properties")
         {
             qDebug() << "prop";
@@ -182,7 +205,9 @@ bool Spreadsheet::readFile(const QString &fileName)
             reader.readNext();
             reader.readNext();
             int column = reader.text().toInt();
-
+            reader.readNext();
+            reader.readNext();
+            reader.readNext();
             for(int i = 0; i < row; ++i)
             {
                 addRow();
@@ -192,14 +217,33 @@ bool Spreadsheet::readFile(const QString &fileName)
                 addColumn();
             }
         }
-//        reader.readNext();
-//        if(reader.name() == "cell")
-//        {
-//           // printCell(reader);
-//        }
-//        qDebug() << reader.tokenString() << reader.name() << reader.text();
-    }
-    while (!reader.atEnd());
+        else if(reader.name() == "cell")
+        {
+            reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+                       int row = reader.text().toInt();
+                       qDebug() << row;
+                       reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+                       int column = reader.text().toInt();
+                       qDebug() << column;
+                       reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+                       QString formula = reader.text().toString();
+                       qDebug() << formula;
+                       reader.readNext();
+                       reader.readNext();
+                       reader.readNext();
+            Cell* cell = new Cell(this);
+            cell->setFormula(formula);
+            this->setItem(row,column,cell);
+        }
+        } while (!reader.atEnd());
 
     if (reader.hasError())
     {
