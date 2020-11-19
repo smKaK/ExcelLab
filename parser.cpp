@@ -50,6 +50,7 @@ QSharedPointer<Node_Statement> Parser::stmt(const QVector<Token> &input, QVector
      }
      else if(type == TokenType::kEof)
      {
+         bIsExeption = false;
          statement->setExpressionNode(nullptr);
          statement->bIsExeption = bIsExeption;
          return statement;

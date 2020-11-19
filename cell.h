@@ -17,15 +17,17 @@ public:
     void setData(int role, const QVariant &value);
     //QVariant data(int role) const;
     void setFormula(const QString &formula);
-    QString formula() const;
+    QString getFormula() const;
     void setDirty();
+    bool getIsEmpty() const;
     QVariant getAnotherCellData(int row, int column) const;
     QTableWidget *getParent();
 private:
     QTableWidget* parent;
     Tree* tree;
-    QSharedPointer<Node_Statement> s;
-    QString val;
+    //QSharedPointer<Node_Statement> s;
+    QString formula;
+    bool isEmpty;
     QString getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;

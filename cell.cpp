@@ -5,8 +5,9 @@
 #include <QDebug>
 #include"tree.h"
 
-Cell::Cell(QTableWidget* parent)
+Cell::Cell(QTableWidget* parent) : isEmpty(true)
 {
+
     qDebug() << "creating cell";
     setDirty();
     tree = new Tree(this);
@@ -24,6 +25,11 @@ Cell::~Cell()
 void Cell::setDirty()
 {
     cacheIsDirty = true;
+}
+
+bool Cell::getIsEmpty() const
+{
+    return isEmpty;
 }
 
 QVariant Cell::getAnotherCellData(int row, int column) const
@@ -61,20 +67,43 @@ QTableWidgetItem *Cell::clone() const
 void Cell::setData(int role, const QVariant &value)
 {
     qDebug() << "set value " << value;
-     tree->setHead( Parser::parse(Lexer::Tokenize(value.toString())));
-     for(auto& el : Lexer::Tokenize(value.toString()))
-     {
-         qDebug() << el.GetLexema();
-     }
+    //tree->setFormula(value.toString());
+
+    tree->setHead( Parser::parse(Lexer::Tokenize(value.toString())));
 
     QTableWidgetItem::setData(Qt::DisplayRole, getValue());
+
+    QTableWidgetItem::setData(Qt::EditRole, value);
+
+
+
+    if(this->data(Qt::DisplayRole) == "")
+    {
+        isEmpty = true;
+    }
+    else
+    {
+        isEmpty = false;
+    }
+
     if (role == Qt::EditRole)
         setDirty();
 }
 
+void Cell::setFormula(const QString &formula)
+{
+     setData(Qt::EditRole, formula);
+
+}
+
+QString Cell::getFormula() const
+{
+   return data(Qt::EditRole).toString();
+}
+
 QString Cell::getValue() const
 {
-    return tree->getResut();
+    return tree->getResult();
 }
 
 QTableWidget* Cell::getParent()

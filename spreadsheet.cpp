@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QTableWidget>
 #include "cell.h"
-
+#include <QXmlStreamWriter>
 
 //Constructor and Destructor///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,6 +91,65 @@ void Spreadsheet::setHeader(int col)
          }
     }
 }
+
+bool Spreadsheet::writeFile(const QString &fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::warning(this, tr("Spreadsheet" ),
+                               tr("Cannot write file %1:\n%2." )
+        .arg(file.fileName())
+        .arg(file.errorString()));
+
+        return false;
+    }
+
+
+
+    QXmlStreamWriter stream(&file);
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("table");
+
+        stream.writeStartElement("preoperties");
+            stream.writeTextElement("row_count", QString::number(this->rowCount()));
+            stream.writeTextElement("Column_count", QString::number(this->columnCount()));
+        stream.writeEndElement();   //properties
+        stream.writeStartElement("cells");
+
+        for(int i =0; i < this->rowCount(); ++i)
+        {
+            for(int j =0; j < this->columnCount(); ++j)
+            {
+                Cell* cell = static_cast<Cell*>(this->item(i,j));
+                if( cell != nullptr)
+                {
+                    if(!cell->getIsEmpty())
+                    {
+                        stream.writeStartElement("cell");
+                            stream.writeTextElement("row", QString::number(i));
+                            stream.writeTextElement("column", QString::number(j));
+                            stream.writeTextElement("formula", cell->data(Qt::EditRole).toString());
+                        stream.writeEndElement();
+
+                    }
+
+                }
+
+            }
+        }
+        stream.writeEndElement(); //cells
+    stream.writeEndElement();   //table
+    stream.writeEndDocument();
+
+    QApplication:: restoreOverrideCursor();
+    return true;
+}
+
 
 //Modifying and recalculation//////////////////////////////////////////////////////////////////////////////////////////////////
 

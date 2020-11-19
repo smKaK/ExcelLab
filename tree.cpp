@@ -1,4 +1,6 @@
 #include "tree.h"
+#include "parser.h"
+#include "lexer.h"
 
 Tree::Tree(Cell *parentCell, QSharedPointer<Node_Statement> head) : parentCell(parentCell), head(head)
 {
@@ -16,9 +18,20 @@ QSharedPointer<Node_Statement> Tree::getHead() const
     return head;
 }
 
-QString Tree::getResut() const
+QString Tree::getResult() const
 {
     return result;
+}
+
+QString Tree::getFormula() const
+{
+    return formula;
+}
+
+void Tree::setFormula(const QString &newFormula)
+{
+    formula = newFormula;
+    setHead( Parser::parse(Lexer::Tokenize( formula)));
 }
 
 void Tree::calculate()

@@ -27,12 +27,11 @@ public slots:
     void recalculate();
     void setAutoRecalculation(bool b);
     void SpreadsheetModified();
-
     void setHeaders();
-        void addRow();
-        void addColumn();
-  void setHeader(int col);
-
+    void addRow();
+    void addColumn();
+    void setHeader(int col);
+    bool writeFile(const QString &fileName);
 
 };
 

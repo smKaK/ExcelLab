@@ -95,10 +95,10 @@ void MainWindow::on_action_Exit_triggered()
 
 bool MainWindow::on_action_Save_as_triggered()
 {
-    qDebug() << "SaveAsSlot";
+    //qDebug() << "SaveAsSlot";
     QString fileName = QFileDialog::getSaveFileName(this,
                                tr("Save Spreadsheet"), ".",
-                               tr("Spreadsheet files (*.sp)"));
+                               tr("Spreadsheet files (*.xml)"));
     if (fileName.isEmpty())
         return false;
 
@@ -120,7 +120,7 @@ void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox::about(this, tr ( "Про програму" ),
     tr( "<h2>Лабораторна \"Редактор таблиць\" 1.1</h2>"
-        "<р>Кляцко Семен К-14"));
+        "<р>Кляцко Семен К-24"));
 }
 
 void MainWindow::on_actionAdd_Column_triggered()
@@ -137,7 +137,14 @@ void MainWindow::on_actionAdd_Row_triggered()
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-    qDebug() << "SaveFileMethod";
+    if (!ui->tableWidget->writeFile(fileName)) {
+        statusBar()->showMessage(tr("Saving canceled"), 2000);
+        return false;
+    }
+
+    //setCurrentFile(fileName);
+
+    //statusBar()->showMessage(tr("File saved"), 2000);
     return true;
 }
 
