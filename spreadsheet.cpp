@@ -115,7 +115,7 @@ bool Spreadsheet::writeFile(const QString &fileName)
     stream.writeStartDocument();
     stream.writeStartElement("table");
 
-        stream.writeStartElement("preoperties");
+        stream.writeStartElement("properties");
             stream.writeTextElement("row_count", QString::number(this->rowCount()));
             stream.writeTextElement("Column_count", QString::number(this->columnCount()));
         stream.writeEndElement();   //properties
@@ -147,6 +147,67 @@ bool Spreadsheet::writeFile(const QString &fileName)
     stream.writeEndDocument();
 
     QApplication:: restoreOverrideCursor();
+    return true;
+}
+
+bool Spreadsheet::readFile(const QString &fileName)
+{
+    qDebug() << "readFile";
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, tr("Spreadsheet"),
+        tr( "Cannot read file %1:\n%2." )
+        .arg(file.fileName())
+        .arg(file.errorString()));
+        return false;
+    }
+
+    this->clear();
+
+    QXmlStreamReader reader(&file);
+
+    do
+    {
+        reader.readNext();
+        qDebug() << "iTERATION";
+        if(reader.name() == "properties")
+        {
+            qDebug() << "prop";
+            reader.readNext();
+            reader.readNext();
+            reader.readNext();
+            int row = reader.text().toInt();
+            reader.readNext();
+            reader.readNext();
+            reader.readNext();
+            reader.readNext();
+            int column = reader.text().toInt();
+
+            for(int i = 0; i < row; ++i)
+            {
+                addRow();
+            }
+            for(int i =0 ; i < column; ++i)
+            {
+                addColumn();
+            }
+        }
+//        reader.readNext();
+//        if(reader.name() == "cell")
+//        {
+//           // printCell(reader);
+//        }
+//        qDebug() << reader.tokenString() << reader.name() << reader.text();
+    }
+    while (!reader.atEnd());
+
+    if (reader.hasError())
+    {
+        qDebug() << "Error:" << reader.errorString();
+    }
+
+    file.close();
+
     return true;
 }
 

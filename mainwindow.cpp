@@ -62,6 +62,21 @@ bool MainWindow::okToContinue()
 
 }
 
+bool MainWindow::loadFile(const QString &fileName)
+{
+    if (!ui->tableWidget->readFile(fileName)) {
+
+        qDebug() << "Error loadFile";
+    //statusBar()->showMessage(tr("Loading canceled"), 2000);
+        return false;
+       }
+    //setCurrentFile(fileName);
+    //statusBar()->showMessage(tr("File loaded"), 2000);
+    qDebug() << "Success loadFile";
+    return true;
+
+}
+
 //Slots/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -73,7 +88,15 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_action_Open_triggered()
 {
-     qDebug() << "SaveOpenSlot";
+    if (okToContinue()){
+        QString fileName = QFileDialog::getOpenFileName(this,
+        tr("0pen Spreadsheet"),".",
+        tr("Spreadsheet files (*.xml)"));
+
+    if (!fileName.isEmpty())
+         loadFile(fileName);
+
+}
 }
 
 bool MainWindow::on_action_Save_triggered()

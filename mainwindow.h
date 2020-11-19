@@ -25,8 +25,8 @@ private:
 
     void setIsModified(bool state);
     bool okToContinue();
-    bool saveFile(const QString &fileName);
-
+    bool saveFile(const QString& fileName);
+    bool loadFile(const QString& fileName);
 private slots:
 
      void spreadsheetModified();

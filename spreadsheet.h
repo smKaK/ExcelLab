@@ -32,6 +32,7 @@ public slots:
     void addColumn();
     void setHeader(int col);
     bool writeFile(const QString &fileName);
+    bool readFile(const QString &fileName);
 
 };
 
