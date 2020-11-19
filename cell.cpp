@@ -7,7 +7,6 @@
 
 Cell::Cell(QTableWidget* parent) : isEmpty(true)
 {
-
     qDebug() << "creating cell";
     setDirty();
     tree = new Tree(this);
@@ -42,27 +41,24 @@ QVariant Cell::getAnotherCellData(int row, int column) const
 
 QTableWidgetItem *Cell::clone() const
 {
-    return new Cell(*this);
+    qDebug() << "clone";
+    return new Cell(parent);
+
 }
 
 
-//QVariant Cell::data(int role) const
-//{
+QVariant Cell::data(int role) const
+{
 
-//        if(role ==Qt::DisplayRole)
-//        {
-//            QVariant res = this->getValue();
-//            if( res.isValid()){
-//                return res;
+        if(role ==Qt::DisplayRole)
+        {
 
-//            } else
-//            {
-//                 return QVariant("Wrong Input");
-//            }
-//        }
-//        return QTableWidgetItem::data(role);
+                return getValue();
 
-//}
+         }
+
+        return QTableWidgetItem::data(role);
+}
 
 void Cell::setData(int role, const QVariant &value)
 {
@@ -71,9 +67,7 @@ void Cell::setData(int role, const QVariant &value)
 
     tree->setHead( Parser::parse(Lexer::Tokenize(value.toString())));
 
-    QTableWidgetItem::setData(Qt::DisplayRole, getValue());
-
-    QTableWidgetItem::setData(Qt::EditRole, value);
+    QTableWidgetItem::setData(role, value);
 
 
 
