@@ -522,7 +522,7 @@ cpp_int Node_CellLink::calculate(const Cell* parentCell, cpp_int leftResult)
     {
         columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1);
     }
-
+    
     return cpp_int(parentCell->getAnotherCellData(rowNum-1, columnNum-1).toString().toStdString());
 }
 

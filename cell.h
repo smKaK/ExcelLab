@@ -3,12 +3,14 @@
 #include <QTableWidgetItem>
 #include "token.h"
 #include "spreadsheet.h"
+#include <QObject>
 
 class Tree;
 class Node_Statement;
 
 class Cell : public QTableWidgetItem
 {
+
 public:
     Cell(QTableWidget* parent);
     ~Cell();
@@ -20,9 +22,14 @@ public:
     QString getFormula() const;
     void setDirty();
     bool getIsEmpty() const;
+    void recalculate();
     QVariant getAnotherCellData(int row, int column) const;
+
     QTableWidget *getParent();
+    QVector<Cell*> cellsThatRef;
 private:
+    //vector<>
+
     QTableWidget* parent;
     Tree* tree;
     //QSharedPointer<Node_Statement> s;
@@ -31,7 +38,7 @@ private:
     QString getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;
-
+    std::pair<int,int> coordByLink(const QString& link) const;
 };
 
 #endif // CELL_H

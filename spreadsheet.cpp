@@ -133,7 +133,7 @@ bool Spreadsheet::writeFile(const QString &fileName)
                         stream.writeStartElement("cell");
                             stream.writeTextElement("row", QString::number(i));
                             stream.writeTextElement("column", QString::number(j));
-                            stream.writeTextElement("formula", cell->data(Qt::EditRole).toString());
+                            stream.writeTextElement("formula", cell->getFormula());
                         stream.writeEndElement();
 
                     }
@@ -239,9 +239,20 @@ bool Spreadsheet::readFile(const QString &fileName)
                        reader.readNext();
                        reader.readNext();
                        reader.readNext();
-            Cell* cell = new Cell(this);
-            cell->setFormula(formula);
-            this->setItem(row,column,cell);
+
+            //Cell* cell = new Cell(this);
+            //cell->setFormula(formula);
+            //this->setItem(row,column,cell);
+            if(item(row,column) == nullptr)
+            {
+                Cell* cell = new Cell(this);
+                cell->setFormula(formula);
+                this->setItem(row,column,cell);
+            }
+            else
+            {
+                static_cast<Cell*>(item(row,column))->setData(Qt::EditRole, formula);
+            }
         }
         } while (!reader.atEnd());
 

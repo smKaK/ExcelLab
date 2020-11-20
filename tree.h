@@ -12,6 +12,7 @@ public:
     QSharedPointer<Node_Statement> getHead() const;
     QString getResult() const;
     QString getFormula() const;
+    void recalculate();
     void setFormula(const QString& newFormula);
 private:
     QSharedPointer<Node_Statement> head;

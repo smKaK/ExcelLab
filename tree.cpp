@@ -28,6 +28,11 @@ QString Tree::getFormula() const
     return formula;
 }
 
+void Tree::recalculate()
+{
+    calculate();
+}
+
 void Tree::setFormula(const QString &newFormula)
 {
     formula = newFormula;
