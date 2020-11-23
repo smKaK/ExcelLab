@@ -7,6 +7,7 @@
 class Tree
 {
 public:
+    bool calcExeption;
     Tree(Cell* parentCell, QSharedPointer<Node_Statement> head = nullptr);
     void setHead(QSharedPointer<Node_Statement> newHead);
     QSharedPointer<Node_Statement> getHead() const;

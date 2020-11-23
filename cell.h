@@ -20,6 +20,7 @@ public:
    QVariant data(int role) const;
     void setFormula(const QString &formula);
     QString getFormula() const;
+
     void setDirty();
     bool getIsEmpty() const;
     void recalculate();
@@ -27,11 +28,12 @@ public:
 
     QTableWidget *getParent();
     QVector<Cell*> cellsThatRef;
+    Tree* tree;
 private:
     //vector<>
 
     QTableWidget* parent;
-    Tree* tree;
+
     //QSharedPointer<Node_Statement> s;
     QString formula;
     bool isEmpty;

@@ -4,6 +4,7 @@
 
 Tree::Tree(Cell *parentCell, QSharedPointer<Node_Statement> head) : parentCell(parentCell), head(head)
 {
+    calcExeption = false;
     calculate();
 }
 
@@ -30,6 +31,7 @@ QString Tree::getFormula() const
 
 void Tree::recalculate()
 {
+    calcExeption = false;
     calculate();
 }
 
@@ -41,7 +43,7 @@ void Tree::setFormula(const QString &newFormula)
 
 void Tree::calculate()
 {
-
+    calcExeption = false;
     if( head == nullptr ||( head->getExpressionNode() == nullptr && head->bIsExeption == false))
     {
         result = QString("");
@@ -85,6 +87,10 @@ void Tree::calculate()
         }
         else {
              result = head->calculate(parentCell).str().data();
+             if(calcExeption)
+             {
+                 result = QString("####");
+             }
         }
 
     }

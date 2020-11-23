@@ -34,7 +34,14 @@ bool Cell::getIsEmpty() const
 
 void Cell::recalculate()
 {
+    //setData(Qt::EditRole, formula);
     tree->recalculate();
+
+    for(auto& el : cellsThatRef)
+    {
+        el->recalculate();
+    }
+
     setData(Qt::DisplayRole, getValue());
 }
 
@@ -71,8 +78,7 @@ void Cell::setData(int role, const QVariant &value)
     if(role == Qt::EditRole)
     {
         formula = value.toString();
-        qDebug() << "set value " << value;
-        //tree->setFormula(value.toString());
+
         auto tokens = Lexer::Tokenize(value.toString());
 
         for(const auto& el : tokens)
@@ -96,12 +102,6 @@ void Cell::setData(int role, const QVariant &value)
             }
         }
 
-    //    for(auto el : cellsThatRef)
-    //    {
-    //        qDebug() << "cells in formula " << el.first << " " << el.second;
-    //    }
-
-     //   tree->setHead( Parser::parse(tokens));
 
         tree->setHead(Parser::parse(tokens));
 
@@ -120,14 +120,10 @@ void Cell::setData(int role, const QVariant &value)
 
         for(auto& el : cellsThatRef)
         {
-            //qDebug() << this->row() << " " << this->column();
-            //qDebug() << el.first << " " << el.second;
+
             el->recalculate();
         }
 
-
-
-        if (role == Qt::EditRole)
             setDirty();
 
     }
@@ -148,6 +144,7 @@ QString Cell::getFormula() const
    //return data(Qt::EditRole).toString();
     return formula;
 }
+
 
 QString Cell::getValue() const
 {
