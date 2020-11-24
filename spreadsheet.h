@@ -4,6 +4,7 @@
 #include <QTableWidget>
 #include <QObject>
 #include "node.h"
+#include <QStack>
 
 class Spreadsheet : public QTableWidget
 {
@@ -13,14 +14,14 @@ signals:
     void modified();
 private:
     bool autoRecalc;
-
-
+    QStack<Cell*> cycleStack;
+    bool dfs(Cell* v);
 
 public:
     Spreadsheet(QWidget* parent = nullptr);
     ~Spreadsheet();
     QString currentLocation();
-
+    bool cycleDetector(Cell*);
     void clear();
 
 public slots:

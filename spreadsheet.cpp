@@ -4,10 +4,48 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTableWidget>
+#include "tree.h"
 #include "cell.h"
 #include <QXmlStreamWriter>
 
 //Constructor and Destructor///////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool Spreadsheet::dfs(Cell *v)
+{
+
+
+        cycleStack.push(v);
+        v->colour = 1;
+        for (auto& to : v->cellsINFormula)
+        {
+            if (to->colour == 0)
+            {
+                if(dfs(to))
+                {
+                    return true;
+                }
+            }
+            if (to->colour == 1)
+            {
+                Cell* top = cycleStack.top();
+
+
+                    do
+                    {
+                            cycleStack.top()->colour = 0;
+                            cycleStack.top()->tree->setResult("####");
+                            cycleStack.pop();
+
+                    } while (!cycleStack.empty() && cycleStack.top() != top);
+
+                return true;
+            }
+        }
+        v->colour = 2;
+        return false;
+
+    }
+
 
 Spreadsheet::Spreadsheet(QWidget* parent)
 {
@@ -24,7 +62,13 @@ Spreadsheet::Spreadsheet(QWidget* parent)
         addRow();
         addColumn();
     }
-
+    for(int i = 0; i < rowCount(); ++i)
+    {
+        for(int j = 0; j < columnCount(); ++j)
+        {
+            setItem(i,j, new Cell(this));
+        }
+    }
 
     setHeaders();
     connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(SpreadsheetModified()));
@@ -298,6 +342,17 @@ QString Spreadsheet::currentLocation()
     return QString::number(currentColumn()+1)
            + QString::number(currentRow() + 1);
 
+}
+
+bool Spreadsheet::cycleDetector(Cell *v)
+{
+    bool isCycle = dfs(v);
+    while(!cycleStack.isEmpty())
+    {
+        cycleStack.top()->colour = 0;
+        cycleStack.pop();
+    }
+    return isCycle;
 }
 
 //Clear/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

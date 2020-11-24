@@ -24,6 +24,11 @@ QString Tree::getResult() const
     return result;
 }
 
+void Tree::setResult(const QString &newResult)
+{
+    result = newResult;
+}
+
 QString Tree::getFormula() const
 {
     return formula;

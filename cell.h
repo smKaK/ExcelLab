@@ -15,7 +15,7 @@ public:
     Cell(QTableWidget* parent);
     ~Cell();
     QTableWidgetItem *clone() const;
-
+    int colour;
     void setData(int role, const QVariant &value);
    QVariant data(int role) const;
     void setFormula(const QString &formula);
@@ -28,6 +28,7 @@ public:
 
     QTableWidget *getParent();
     QVector<Cell*> cellsThatRef;
+    QVector<Cell*> cellsINFormula;
     Tree* tree;
 private:
     //vector<>

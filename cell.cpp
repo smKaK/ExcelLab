@@ -12,6 +12,8 @@ Cell::Cell(QTableWidget* parent) : isEmpty(true)
     tree = new Tree(this);
     this->parent = parent;
     cellsThatRef.resize(0);
+    cellsINFormula.resize(0);
+    colour = 0;
 }
 
 
@@ -37,6 +39,12 @@ void Cell::recalculate()
     //setData(Qt::EditRole, formula);
     tree->recalculate();
 
+    if(static_cast<Spreadsheet*>(parent)->cycleDetector(this))
+    {
+        qDebug() << "cycle";
+        return;
+    }
+
     for(auto& el : cellsThatRef)
     {
         el->recalculate();
@@ -48,6 +56,12 @@ void Cell::recalculate()
 QVariant Cell::getAnotherCellData(int row, int column) const
 {
     qDebug() << row << " " << column;
+    if(parent->item(row,column) == nullptr)
+    {
+        parent->setItem(row,column, new Cell(parent));
+        parent->item(row,column)->setData(Qt::DisplayRole, "Empty");
+
+    }
     return parent->item(row,column)->data(Qt::DisplayRole);
 }
 
@@ -75,8 +89,17 @@ QVariant Cell::data(int role) const
 
 void Cell::setData(int role, const QVariant &value)
 {
+
     if(role == Qt::EditRole)
     {
+
+        for(auto& el : this->cellsINFormula)
+        {
+            el->cellsThatRef.removeAll(this);
+        }
+
+        cellsINFormula.clear();
+
         formula = value.toString();
 
         auto tokens = Lexer::Tokenize(value.toString());
@@ -85,25 +108,37 @@ void Cell::setData(int role, const QVariant &value)
         {
             if(el.getType() == TokenType::kCell)
             {
-                std::pair<int, int> coords = coordByLink(el.GetLexema());
-
+               std::pair<int, int> coords = coordByLink(el.GetLexema());
+               getAnotherCellData(coords.first,coords.second);
                Cell* cell = static_cast<Cell*>(parent->item(coords.first, coords.second));
-               if(cell == nullptr)
-               {
-                    Cell* newCell = new Cell(parent);
-                    newCell->cellsThatRef.push_back(this);
-                    parent->setItem(coords.first, coords.second, newCell);
-               }
-               else
-               {
-                    cell->cellsThatRef.push_back(this);
-                }
+               this->cellsINFormula.push_back(cell);
+               cell->cellsThatRef.push_back(this);
 
             }
         }
 
 
         tree->setHead(Parser::parse(tokens));
+
+        if(static_cast<Spreadsheet*>(parent)->cycleDetector(this))
+        {
+            qDebug() << "cycle";
+
+            if(this->data(Qt::DisplayRole) == "")
+            {
+                isEmpty = true;
+            }
+            else
+            {
+                isEmpty = false;
+            }
+
+
+                setDirty();
+
+
+            return;
+        }
 
         QTableWidgetItem::setData(role, value);
 
@@ -125,8 +160,8 @@ void Cell::setData(int role, const QVariant &value)
         }
 
             setDirty();
+}
 
-    }
     else if(role == Qt::DisplayRole)
     {
         QTableWidgetItem::setData(Qt::DisplayRole, value);
