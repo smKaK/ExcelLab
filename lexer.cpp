@@ -3,9 +3,8 @@
 
 QVector<Token> Lexer::Tokenize(const QString& input)
 {
-    qDebug() << "Tokenize";
     QVector<Token> v;
-    QRegExp rx("(\\ )"); //RegEx for ' ' or ',' or '.' or ':' or '\t'
+    QRegExp rx("(\\ )"); //RegEx for ' '
     QStringList query = input.split(rx);
     for(auto& s : query)
     {
@@ -40,6 +39,7 @@ QVector<Token> Lexer::Tokenize(const QString& input)
            }
        }
    }
-           v.push_back(Token(QString("Eof"),TokenType::kEof));
-       return v;
+
+    v.push_back(Token(QString("Eof"),TokenType::kEof));
+    return v;
 }

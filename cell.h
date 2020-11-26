@@ -14,22 +14,25 @@ class Cell : public QTableWidgetItem
 public:
     Cell(QTableWidget* parent);
     ~Cell();
+
     QTableWidgetItem *clone() const;
+
     int getColour() const;
     void setColour(int newColour);
+    Tree* getTree();
+    const Tree* getTree() const;
+    QTableWidget *getParent();
+    QVector<Cell *> getCellsThatRefs() const;
+    QVector<Cell *>& getCellsThatRefs();
     void setData(int role, const QVariant &value);
     QVariant data(int role) const;
     void setFormula(const QString &formula);
     QString getFormula() const;
-    Tree* getTree();
-    const Tree* getTree() const;
     void setDirty();
     bool getIsEmpty() const;
     void recalculate();
     QVariant getAnotherCellData(int row, int column) const;
-    QTableWidget *getParent();
-    QVector<Cell *> getCellsThatRefs() const;
-    QVector<Cell *>& getCellsThatRefs();
+
 private:
 
     int colour;
@@ -39,7 +42,6 @@ private:
     Tree* tree;
     QString formula;
     bool isEmpty;
-
     QString getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;

@@ -17,7 +17,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
     bool bIsModified;
     QString curFile;
 
@@ -27,6 +26,8 @@ private:
     bool okToContinue();
     bool saveFile(const QString& fileName);
     bool loadFile(const QString& fileName);
+    void setCurFile(const QString& fileName);
+
 private slots:
 
      void spreadsheetModified();
@@ -38,11 +39,8 @@ private slots:
      void on_action_Recalculate_triggered();
      void on_action_About_Qt_triggered();
      void on_actionAbout_triggered();
-
      void on_actionAdd_Column_triggered();
-
      void on_actionAdd_Row_triggered();
-
      void on_actiondebug_triggered();
 
 protected:

@@ -65,16 +65,18 @@ bool MainWindow::okToContinue()
 bool MainWindow::loadFile(const QString &fileName)
 {
     if (!ui->tableWidget->readFile(fileName)) {
-
-        qDebug() << "Error loadFile";
-    //statusBar()->showMessage(tr("Loading canceled"), 2000);
+        statusBar()->showMessage(tr("Loading canceled"), 2000);
         return false;
        }
-    //setCurrentFile(fileName);
-    //statusBar()->showMessage(tr("File loaded"), 2000);
-    qDebug() << "Success loadFile";
+    setCurFile(fileName);
+    statusBar()->showMessage(tr("File loaded"), 2000);
     return true;
 
+}
+
+void MainWindow::setCurFile(const QString &fileName)
+{
+    curFile = fileName;
 }
 
 //Slots/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,9 +167,9 @@ bool MainWindow::saveFile(const QString &fileName)
         return false;
     }
 
-    //setCurrentFile(fileName);
-
-    //statusBar()->showMessage(tr("File saved"), 2000);
+    setCurFile(fileName);
+    statusBar()->showMessage(tr("File saved"), 2000);
+    bIsModified = false;
     return true;
 }
 

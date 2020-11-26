@@ -210,6 +210,7 @@ QString Cell::getValue() const
     return tree->getResult();
 }
 
+//convert cell reference formula to coordinate pair of coordinates [row, column]
 std::pair<int, int> Cell::coordByLink(const QString &link) const
 {
     QString column;
