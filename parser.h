@@ -38,10 +38,6 @@ private:
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
     static QSharedPointer<Node_ExpressionWithBrackets> exprWithBrackets(const QVector<Token>& input,
                                QVector<Token>::const_iterator& it, bool& bIsExeption);
-//    static QSharedPointer<Node_UnaryOperator>   termUnOp(const QVector<Token>& input,
-//                               QVector<Token>::const_iterator& it, bool& bIsExeption);
-
-
 
 };
 

@@ -456,6 +456,13 @@ cpp_int Node_CellLink::calculate(Cell* parentCell, cpp_int leftResult)
     {
         columnNum += std::pow(26, column.length() - 1 - i)*(column[i].unicode() - QChar('A').unicode() + 1);
     }
+
+    if(rowNum > parentCell->getParent()->rowCount() || columnNum > parentCell->getParent()->columnCount())
+    {
+        parentCell->getTree()->calcExeption = true;
+        return cpp_int();
+    }
+
     std::string data = parentCell->getAnotherCellData(rowNum-1, columnNum-1).toString().toStdString();
     if(data == "####" || data == "")
     {

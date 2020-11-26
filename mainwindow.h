@@ -29,7 +29,7 @@ private:
     void setCurFile(const QString& fileName);
 
 private slots:
-
+     void setFormulaInLineEdit(int row,int column);
      void spreadsheetModified();
      void on_actionNew_triggered();
      void on_action_Open_triggered();

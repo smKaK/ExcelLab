@@ -14,9 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     bIsModified(false)
 {
     ui->setupUi(this);
-    connect(ui->tableWidget, SIGNAL(modified()),
-    this, SLOT(spreadsheetModified()));
-
+    connect(ui->tableWidget, SIGNAL(modified()), this, SLOT(spreadsheetModified()));
+    connect(ui->tableWidget, SIGNAL(cellClicked(int,int)), this, SLOT(setFormulaInLineEdit(int,int)));
+    connect(ui->tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(setFormulaInLineEdit(int,int)));
 }
 
 MainWindow::~MainWindow()
@@ -79,6 +79,12 @@ void MainWindow::setCurFile(const QString &fileName)
     curFile = fileName;
 }
 
+void MainWindow::setFormulaInLineEdit(int row, int column)
+{
+    qDebug() << "setFormulainlineEdit";
+    ui->lineEdit->setText(ui->tableWidget->item(row,column)->data(Qt::EditRole).toString());
+}
+
 //Slots/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -110,7 +116,6 @@ bool MainWindow::on_action_Save_triggered()
         return saveFile(curFile);
     }
 
-    return true;
 }
 
 void MainWindow::on_action_Exit_triggered()

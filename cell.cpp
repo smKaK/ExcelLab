@@ -127,10 +127,13 @@ void Cell::setData(int role, const QVariant &value)
             if(el.getType() == TokenType::kCell)
             {
                std::pair<int, int> coords = coordByLink(el.GetLexema());
-               Cell* cell = static_cast<Cell*>(parent->item(coords.first, coords.second));
-               this->cellsINFormula.push_back(cell);
-               cell->cellsThatRef.push_back(this);
+               if(coords.first != -1)
+               {
+                   Cell* cell = static_cast<Cell*>(parent->item(coords.first, coords.second));
+                   this->cellsINFormula.push_back(cell);
+                   cell->cellsThatRef.push_back(this);
 
+               }
             }
         }
 
@@ -232,6 +235,12 @@ std::pair<int, int> Cell::coordByLink(const QString &link) const
     }
     --rowNum;
     --columnNum;
+
+    if(rowNum >  parent->rowCount() || columnNum >  parent->columnCount())
+    {
+        tree->calcExeption = true;
+        return std::make_pair(-1,-1);
+    }
     return std::make_pair(rowNum, columnNum);
 }
 
