@@ -5,15 +5,12 @@
 #include <QDebug>
 #include"tree.h"
 
-Cell::Cell(QTableWidget* parent) : isEmpty(true)
+Cell::Cell(QTableWidget* parent) : isEmpty(true), colour(0), parent(parent)
 {
-    qDebug() << "creating cell";
     setDirty();
     tree = new Tree(this);
-    this->parent = parent;
     cellsThatRef.resize(0);
     cellsINFormula.resize(0);
-    colour = 0;
 }
 
 
@@ -41,7 +38,6 @@ void Cell::recalculate()
 
     if(static_cast<Spreadsheet*>(parent)->cycleDetector(this))
     {
-        qDebug() << "cycle";
         return;
     }
 
@@ -65,12 +61,31 @@ QVariant Cell::getAnotherCellData(int row, int column) const
     return parent->item(row,column)->data(Qt::DisplayRole);
 }
 
+QVector<Cell *> Cell::getCellsThatRefs() const
+{
+    return cellsThatRef;
+}
+
+QVector<Cell *>& Cell::getCellsThatRefs()
+{
+    return cellsThatRef;
+}
+
 
 QTableWidgetItem *Cell::clone() const
 {
-    qDebug() << "clone";
     return new Cell(parent);
 
+}
+
+int Cell::getColour() const
+{
+    return colour;
+}
+
+void Cell::setColour(int newColour)
+{
+    colour = newColour;
 }
 
 
@@ -92,24 +107,26 @@ void Cell::setData(int role, const QVariant &value)
 
     if(role == Qt::EditRole)
     {
-
+      //updating references
         for(auto& el : this->cellsINFormula)
         {
-            el->cellsThatRef.removeAll(this);
+            el->getCellsThatRefs().removeAll(this);
         }
 
         cellsINFormula.clear();
+
+
 
         formula = value.toString();
 
         auto tokens = Lexer::Tokenize(value.toString());
 
+        //detecting cell references in new formula
         for(const auto& el : tokens)
         {
             if(el.getType() == TokenType::kCell)
             {
                std::pair<int, int> coords = coordByLink(el.GetLexema());
-               getAnotherCellData(coords.first,coords.second);
                Cell* cell = static_cast<Cell*>(parent->item(coords.first, coords.second));
                this->cellsINFormula.push_back(cell);
                cell->cellsThatRef.push_back(this);
@@ -117,12 +134,10 @@ void Cell::setData(int role, const QVariant &value)
             }
         }
 
-
+        //parsing and cycle detecting
         tree->setHead(Parser::parse(tokens));
-
         if(static_cast<Spreadsheet*>(parent)->cycleDetector(this))
         {
-            qDebug() << "cycle";
 
             if(this->data(Qt::DisplayRole) == "")
             {
@@ -133,17 +148,15 @@ void Cell::setData(int role, const QVariant &value)
                 isEmpty = false;
             }
 
-
-                setDirty();
-
-
+            setDirty();
             return;
         }
 
+        //setting data
         QTableWidgetItem::setData(role, value);
 
 
-
+        // checking display role data
         if(this->data(Qt::DisplayRole) == "")
         {
             isEmpty = true;
@@ -153,15 +166,15 @@ void Cell::setData(int role, const QVariant &value)
             isEmpty = false;
         }
 
+        //recalculating all cells that depends on this cell
         for(auto& el : cellsThatRef)
         {
 
             el->recalculate();
         }
 
-            setDirty();
-}
-
+        setDirty();
+    }
     else if(role == Qt::DisplayRole)
     {
         QTableWidgetItem::setData(Qt::DisplayRole, value);
@@ -178,6 +191,16 @@ QString Cell::getFormula() const
 {
    //return data(Qt::EditRole).toString();
     return formula;
+}
+
+Tree* Cell::getTree()
+{
+    return tree;
+}
+
+const Tree* Cell::getTree() const
+{
+    return tree;
 }
 
 

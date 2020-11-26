@@ -12,39 +12,34 @@
 
 bool Spreadsheet::dfs(Cell *v)
 {
-
-
         cycleStack.push(v);
-        v->colour = 1;
-        for (auto& to : v->cellsINFormula)
+         v->setColour(1);
+        for (auto& to : v->getCellsThatRefs())
         {
-            if (to->colour == 0)
+            if (to->getColour() == 0)
             {
                 if(dfs(to))
                 {
                     return true;
                 }
             }
-            if (to->colour == 1)
+            if (to->getColour() == 1)
             {
                 Cell* top = cycleStack.top();
+                do
+                {
+                    cycleStack.top()->setColour(0);
+                    cycleStack.top()->getTree()->setResult("####");
+                    cycleStack.pop();
 
-
-                    do
-                    {
-                            cycleStack.top()->colour = 0;
-                            cycleStack.top()->tree->setResult("####");
-                            cycleStack.pop();
-
-                    } while (!cycleStack.empty() && cycleStack.top() != top);
+                 } while (!cycleStack.empty() && cycleStack.top() != top);
 
                 return true;
             }
         }
-        v->colour = 2;
+        v->setColour(2);
         return false;
-
-    }
+}
 
 
 Spreadsheet::Spreadsheet(QWidget* parent)
@@ -92,12 +87,25 @@ void Spreadsheet::setHeaders()
 void Spreadsheet::addRow()
 {
     QTableWidget::insertRow(rowCount());
+    for(int i = 0; i < columnCount(); ++i)
+    {
+
+            setItem(rowCount()-1, i, new Cell(this));
+
+    }
+
 }
 
 void Spreadsheet::addColumn()
 {
     QTableWidget::insertColumn(columnCount());
     setHeader(columnCount()-1);
+    for(int i = 0; i < rowCount(); ++i)
+    {
+
+            setItem(i,columnCount()-1, new Cell(this));
+
+    }
 }
 
 
@@ -349,7 +357,7 @@ bool Spreadsheet::cycleDetector(Cell *v)
     bool isCycle = dfs(v);
     while(!cycleStack.isEmpty())
     {
-        cycleStack.top()->colour = 0;
+        cycleStack.top()->setColour(0);
         cycleStack.pop();
     }
     return isCycle;

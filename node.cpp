@@ -526,7 +526,7 @@ cpp_int Node_CellLink::calculate(Cell* parentCell, cpp_int leftResult)
     std::string data = parentCell->getAnotherCellData(rowNum-1, columnNum-1).toString().toStdString();
     if(data == "####" || data == "")
     {
-        parentCell->tree->calcExeption = true;
+        parentCell->getTree()->calcExeption = true;
         return cpp_int();
     }
     return cpp_int(data);

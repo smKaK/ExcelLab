@@ -15,29 +15,31 @@ public:
     Cell(QTableWidget* parent);
     ~Cell();
     QTableWidgetItem *clone() const;
-    int colour;
+    int getColour() const;
+    void setColour(int newColour);
     void setData(int role, const QVariant &value);
-   QVariant data(int role) const;
+    QVariant data(int role) const;
     void setFormula(const QString &formula);
     QString getFormula() const;
-
+    Tree* getTree();
+    const Tree* getTree() const;
     void setDirty();
     bool getIsEmpty() const;
     void recalculate();
     QVariant getAnotherCellData(int row, int column) const;
-
     QTableWidget *getParent();
+    QVector<Cell *> getCellsThatRefs() const;
+    QVector<Cell *>& getCellsThatRefs();
+private:
+
+    int colour;
+    QTableWidget* parent;
     QVector<Cell*> cellsThatRef;
     QVector<Cell*> cellsINFormula;
     Tree* tree;
-private:
-    //vector<>
-
-    QTableWidget* parent;
-
-    //QSharedPointer<Node_Statement> s;
     QString formula;
     bool isEmpty;
+
     QString getValue() const ;
     mutable QVariant cachedValue;
     mutable bool cacheIsDirty;
