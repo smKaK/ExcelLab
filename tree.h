@@ -17,10 +17,11 @@ public:
     void recalculate();
     void setFormula(const QString& newFormula);
 private:
+    Cell* parentCell;
     QSharedPointer<Node_Statement> head;
     QString result;
     QString formula;
-    Cell* parentCell;
+
     void calculate();
 
 };

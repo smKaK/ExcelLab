@@ -27,7 +27,7 @@ class Node
 public:
 
     virtual boost::multiprecision::cpp_int calculate( Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) = 0;
-    virtual ~Node(){}
+    virtual ~Node() = 0;
 };
 
 class Node_Statement : public Node
@@ -44,7 +44,6 @@ public:
     virtual boost::multiprecision::cpp_int calculate( Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
     void setExpressionNode(const QSharedPointer<Node_Expression>& newExprNode);
     QSharedPointer<Node_Expression> getExpressionNode() const;
-    ~Node_Statement() override;
 };
 
 class Node_Expression : public Node
@@ -60,7 +59,7 @@ public:
     QSharedPointer<Node_Multiplication> getMultNode();
     QSharedPointer<Node_ExpressionRight> getExprRight();
     Node_Expression( );
-    ~Node_Expression() override;
+
 };
 
 class Node_ExpressionRight : public Node
@@ -77,7 +76,7 @@ public:
     void setRightExprNode(QSharedPointer<Node_Expression> newRightExprNode);
     QSharedPointer<Node_ExpressionRight> GetEsxprRight();
     Node_ExpressionRight( );
-    ~Node_ExpressionRight() override;
+
 
 };
 
@@ -93,7 +92,7 @@ public:
     QSharedPointer<Node_Power> getPowerNode();
     QSharedPointer<Node_MultiplicationRight> getMultRightNode();
     Node_Multiplication( );
-    ~Node_Multiplication() override;
+
 };
 
 
@@ -108,7 +107,7 @@ public:
     void setMultiplicationNode(QSharedPointer<Node_Multiplication> newMultNode);
     TokenType GetOperator() const;
     Node_MultiplicationRight( );
-    ~Node_MultiplicationRight() override;
+
 };
 
 class Node_Power : public Node
@@ -122,7 +121,7 @@ public:
    void setTermNode(QSharedPointer<Node_Term> newTermNode);
    void setPowerRightNode(QSharedPointer<Node_PowerRight> newPowerRightNode);
    Node_Power( );
-   ~Node_Power() override;
+
 };
 
 class Node_PowerRight : public Node
@@ -137,7 +136,7 @@ public:
    void setOperator(TokenType type);
    void setPowerNode(QSharedPointer<Node_Power> newPowerNode);
    Node_PowerRight( );
-   ~Node_PowerRight() override;
+
 
 };
 
@@ -149,7 +148,6 @@ private:
     TokenType termType;
 public:
     Node_Term(TokenType op = TokenType::kPlus);
-    ~Node_Term() override;
     void setNode(QSharedPointer<Node> newNode, TokenType type);
     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 };
@@ -159,7 +157,6 @@ class Node_Number : public Node
 public:
     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
     Node_Number( );
-    ~Node_Number() override;
     TokenType getTokenType();
     QString getLexema();
     void setLexema(const QString& newLexema);
@@ -174,7 +171,6 @@ class Node_CellLink : public Node
 {
 public:
     Node_CellLink();
-    ~Node_CellLink() override;
     void setLink(const QString& newCellLink);
     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 private:
@@ -187,7 +183,6 @@ private:
 class Node_FuncWith2Args : public Node{
 public:
     Node_FuncWith2Args(TokenType function);
-    ~Node_FuncWith2Args() override;
     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
     void setExpr1(QSharedPointer<Node_Expression> newExpr1);
     void setExpr2(QSharedPointer<Node_Expression> newExpr2);
@@ -201,7 +196,6 @@ class Node_FuncWith1Arg : public Node{
 
 public:
     Node_FuncWith1Arg();
-    ~Node_FuncWith1Arg() override;
     Node_FuncWith1Arg(TokenType function);
     void setExprWithBr(QSharedPointer<Node_ExpressionWithBrackets> newExprWithBrackets);
     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
@@ -217,8 +211,7 @@ private:
 
 public:
     void setExpressionNode(QSharedPointer<Node_Expression> newExpression);
-    virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
-    ~Node_ExpressionWithBrackets() override;
+     virtual boost::multiprecision::cpp_int calculate(Cell* parentCell, boost::multiprecision::cpp_int leftResult = 0) override;
 };
 
 #endif // NODE_H
